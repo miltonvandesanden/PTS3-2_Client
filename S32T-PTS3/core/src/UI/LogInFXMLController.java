@@ -5,6 +5,7 @@
  */
 package UI;
 
+import Game.ClientManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -36,7 +37,8 @@ public class LogInFXMLController implements Initializable {
     @FXML
     private void JoinLobby(ActionEvent event) {
         String UserName = tfUserName.getText();
-        
+        ClientManager clientManager = new ClientManager();
+        clientManager.logIn(UserName);
     }
     
 }

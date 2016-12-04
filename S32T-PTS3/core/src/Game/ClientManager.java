@@ -140,13 +140,21 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
+        
+        try
+        {
+            serverComms.Login("player1", IP.toString(), PORTNUMBER);
+        } catch (RemoteException ex)
+        {
+            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Match logIn(String username)
     {
         try
         {
-            return serverComms.Login(username);
+            return serverComms.Login(username, IP.toString(), PORTNUMBER);
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
