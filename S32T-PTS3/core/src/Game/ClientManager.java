@@ -464,7 +464,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         batch.draw(mapTexture2, mainMatch.getMap().getFinish().getBox().x, mainMatch.getMap().getFinish().getBox().y, mainMatch.getMap().getFinish().getBox().width, mainMatch.getMap().getFinish().getBox().height);
     }
 
-    public void handleMovement() {
+    public void handleMovement(){
         if (moveUp) {
             self.getPlayerCar().increaseSpeed();
         } else {
@@ -480,6 +480,14 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         }
 
         self.getPlayerCar().moveForward();
+        try
+        {
+            clientComms.pushPlayerPosition(username, new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
+        } catch (RemoteException ex)
+        {
+            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     @Override
