@@ -246,7 +246,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         renderMap();
 //        //player input to car movement
 //        if (interval == 0) {
-//            handleMovement();
+            handleMovement();
 //            toStart = false;
 //
 //        } else {
@@ -270,7 +270,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        chatBox.draw(batch, totalTime);
 //        chatInput.draw(batch, totalTime);
 //        handleShooting();
-//        batch.end();
+        batch.end();
     }
 
     public void handleLap() {
