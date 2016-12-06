@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Map;
+package match2;
 
+import java.io.Serializable;
 import match2.Map;
 import match2.Obstacle;
 import match2.ObstacleType;
@@ -15,9 +16,11 @@ import java.util.List;
  *
  * @author soufyan
  */
-public class MapManager
+public class MapManager implements Serializable
 {
     public List<Map> maps;
+    
+    public static final long serialVersionUID = 1875;
     
     public MapManager()
     {

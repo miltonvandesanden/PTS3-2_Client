@@ -7,7 +7,7 @@ package Game;
 
 import Chat.Chat;
 import Chat.ChatMessage;
-import Map.MapManager;
+import match2.MapManager;
 import match2.Map;
 import match2.Match;
 import match2.Obstacle;
@@ -30,6 +30,7 @@ import Stubs.CommsStub;
 import utils2.Projectile;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.GL20;
 import comms.IServerComms;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -46,7 +47,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     //Map variables
     private MapManager mapManager;
-    private Map map;
     private Match mainMatch;
     private Texture mapTexture1;
     private Texture mapTexture2;
@@ -135,16 +135,16 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
-        
        mainMatch = logIn("player1");
     }
 
     
     public  Match logIn(String username)
-    {
+    {        
+
         try
         {
-            return serverComms.Login(username, "localhost", PORTNUMBER);
+             return serverComms.Login(username, "localhost", PORTNUMBER);
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -163,7 +163,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //map variables
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
-//        //timelapse variables
+        //timelapse variables
 //        startTimer = new Timer();
 //        int delay = 1000;
 //        int period = 1000;
@@ -183,7 +183,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //            }
 //        }, delay, period);
 //        //playervariables
-//        batch = new SpriteBatch();
+        batch = new SpriteBatch();
 //        self = new CompetingPlayer("Player1", Utils.Color.BLACK, new Point(350, 665));
 //        self.getPlayerCar().getSprite().rotate(180);
 //        mainMatch.addCompetingPlayer(self);
@@ -201,15 +201,15 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     @Override
     public void render()
     {
-//        //render necessities
-//        Gdx.gl.glClearColor(1, 0, 0, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        batch.begin();
-//
+        //render necessities
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+
 //        //garbage collector 
 //        System.gc();
-//        //render map and map elementsjbjhbhjvhg
-//        renderMap();
+        //render map and map elementsjbjhbhjvhg
+        renderMap();
 //        //player input to car movement
 //
 //        if (interval == 0) {
@@ -241,12 +241,12 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     }
 
     public void handleLap() {
-        if (!halfLap && map.getFinish2().getBox().overlaps(self.getPlayerCar().getRectangle())) {
+        if (!halfLap && mainMatch.getMap().getFinish2().getBox().overlaps(self.getPlayerCar().getRectangle())) {
             halfLap = true;
 //            System.out.println(self.getUsername() + " is halfway");
         }
 
-        if (halfLap && map.getFinish().getBox().overlaps(self.getPlayerCar().getRectangle())) {
+        if (halfLap && mainMatch.getMap().getFinish().getBox().overlaps(self.getPlayerCar().getRectangle())) {
             halfLap = false;
             self.setCurrentLap(self.getCurrentLap() + 1);
 //            System.out.println(self.getUsername() + " Current Lap: " + self.getCurrentLap());
@@ -282,7 +282,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     }
 
     public void handleCollision() {
-        for (Obstacle obstacle : map.getWalls()) {
+        for (Obstacle obstacle : mainMatch.getMap().getWalls()) {
             if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle())) {
                 self.getPlayerCar().getSprite().rotate(180);
                 self.getPlayerCar().moveForward();
@@ -294,7 +294,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
     public void renderMap() {
         batch.draw(mapTexture1, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(mapTexture2, map.getFinish().getBox().x, map.getFinish().getBox().y, map.getFinish().getBox().width, map.getFinish().getBox().height);
+        batch.draw(mapTexture2, mainMatch.getMap().getFinish().getBox().x, mainMatch.getMap().getFinish().getBox().y, mainMatch.getMap().getFinish().getBox().width, mainMatch.getMap().getFinish().getBox().height);
     }
 
     public void handleMovement() {
