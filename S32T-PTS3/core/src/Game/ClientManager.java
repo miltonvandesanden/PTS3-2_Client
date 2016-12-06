@@ -218,13 +218,15 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         setPosition(self, selfSprite);
     }
     
-    public void setPosition(CompetingPlayer competingPlayer, Sprite sprite)
+    public Sprite setPosition(CompetingPlayer competingPlayer, Sprite sprite)
     {
-        selfSprite = generateSprite(competingPlayer);
-        selfSprite.setSize(competingPlayer.getPlayerCar().getRectangle().getWidth(), competingPlayer.getPlayerCar().getRectangle().getHeight());
-        selfSprite.setPosition(competingPlayer.getPlayerCar().getRectangle().getX(), competingPlayer.getPlayerCar().getRectangle().getY());
-        selfSprite.setRotation(competingPlayer.getPlayerCar().getRotation());
-        selfSprite.setOrigin(6.5f, 10f);
+        sprite = generateSprite(competingPlayer);
+        sprite.setSize(competingPlayer.getPlayerCar().getRectangle().getWidth(), competingPlayer.getPlayerCar().getRectangle().getHeight());
+        sprite.setPosition(competingPlayer.getPlayerCar().getRectangle().getX(), competingPlayer.getPlayerCar().getRectangle().getY());
+        sprite.setRotation(competingPlayer.getPlayerCar().getRotation());
+        sprite.setOrigin(6.5f, 10f);
+        
+        return sprite;
     }
     
     public Sprite generateSprite(Player player)
@@ -265,7 +267,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //render map and map elementsjbjhbhjvhg
         renderMap();
 //        //player input to car movement
-        setPosition(self, selfSprite);
+        selfSprite = setPosition(self, selfSprite);
 //        if (interval == 0) {
             handleMovement();
 //            toStart = false;
@@ -289,21 +291,23 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         {
             if(player.getClass() == CompetingPlayer.class && player != self)
             {
-                
                 switch(playerCounter)
                 {
                     case 0:
-                        setPosition((CompetingPlayer) player, sprite1);
+                        sprite1 = setPosition((CompetingPlayer) player, sprite1);
                         sprite1.draw(batch);
                         break;
                     case 1:
-                        setPosition((CompetingPlayer) player, sprite2);
+                        sprite2 = setPosition((CompetingPlayer) player, sprite2);
                         sprite2.draw(batch);
                         break;
                     case 2:
-                        setPosition((CompetingPlayer) player, sprite3);
+                        sprite3 = setPosition((CompetingPlayer) player, sprite3);
                         sprite3.draw(batch);
-                }                
+                        playerCounter = -1;
+                }
+                
+                playerCounter++;
             }
         }
         
