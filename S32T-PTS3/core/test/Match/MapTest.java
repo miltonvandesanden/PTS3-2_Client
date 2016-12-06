@@ -5,9 +5,9 @@
  */
 package Match;
 
-import Map.Obstacle;
-import Map.Map;
-import Player.Player;
+import match2.Obstacle;
+import match2.Map;
+import player2.Player;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;

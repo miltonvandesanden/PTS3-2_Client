@@ -5,7 +5,7 @@
  */
 package Chat;
 
-import Player.Player;
+import player2.Player;
 
 /**
  * @author Marouan Bakour

@@ -3,19 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Player;
-
-import Utils.Color;
+package utils2;
 
 /**
  *
  * @author Milton van de Sanden
  */
-public interface ISpectatingPlayer
+public enum Color
 {
-    public String getUsername();
-    public void setUsername(String username);
-    
-    public Color getColor();
-    public void setColor(Color color);
+    BLACK,
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW
 }

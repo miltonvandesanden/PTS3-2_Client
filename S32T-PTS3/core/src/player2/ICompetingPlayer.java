@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Player;
+package player2;
 
-import Utils.Color;
-import Utils.PlayerState;
+import utils2.Color;
+import utils2.PlayerState;
 
 /**
  *

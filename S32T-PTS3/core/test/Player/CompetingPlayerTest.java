@@ -5,6 +5,9 @@
  */
 package Player;
 
+import player2.PlayerCar;
+import player2.CompetingPlayer;
+import player2.Player;
 import com.badlogic.gdx.graphics.Texture;
 import java.awt.Color;
 import java.awt.Point;

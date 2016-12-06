@@ -5,7 +5,7 @@
  */
 package Game;
 
-import Player.Player;
+import player2.Player;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;

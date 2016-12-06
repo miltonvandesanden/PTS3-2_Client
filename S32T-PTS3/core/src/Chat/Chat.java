@@ -5,7 +5,7 @@
  */
 package Chat;
 
-import Player.Player;
+import player2.Player;
 import java.util.ArrayList;
 import java.util.List;
 

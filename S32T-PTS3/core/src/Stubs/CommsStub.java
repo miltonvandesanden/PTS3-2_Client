@@ -6,7 +6,7 @@
 package Stubs;
 
 import Game.IComms;
-import Player.CompetingPlayer;
+import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 

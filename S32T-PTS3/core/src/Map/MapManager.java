@@ -5,6 +5,9 @@
  */
 package Map;
 
+import match2.Map;
+import match2.Obstacle;
+import match2.ObstacleType;
 import java.util.ArrayList;
 import java.util.List;
 

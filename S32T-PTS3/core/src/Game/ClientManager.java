@@ -8,34 +8,29 @@ package Game;
 import Chat.Chat;
 import Chat.ChatMessage;
 import Map.MapManager;
-import Map.Map;
+import match2.Map;
 import match2.Match;
-import Map.Obstacle;
-import Utils.PlayerState;
+import match2.Obstacle;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import com.badlogic.gdx.graphics.Color;
-import Player.CompetingPlayer;
-import Player.Player;
+import player2.CompetingPlayer;
+import player2.Player;
 import Stubs.CommsStub;
-import Utils.Projectile;
+import utils2.Projectile;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import comms.IServerComms;
-import java.awt.Point;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
@@ -90,7 +85,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "192.168.178.16";
+    private final String SERVERIP = "145.93.34.2";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -141,7 +136,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
         
-        logIn("player1");
+       mainMatch = logIn("player1");
     }
 
     
@@ -149,7 +144,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     {
         try
         {
-            return serverComms.Login(username, IP.toString(), PORTNUMBER);
+            return serverComms.Login(username, "localhost", PORTNUMBER);
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -160,14 +155,14 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     @Override
     public void create()
     {
-//        //play sound
-//        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
-//        sound.play();
-//        //standard
-//        Gdx.input.setInputProcessor(this);
-//        //map variables
-//        mapTexture1 = new Texture(map.getBackgroundPath());
-//        mapTexture2 = new Texture(map.getFinish().getSpritePath());
+        //play sound
+        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
+        sound.play();
+        //standard
+        Gdx.input.setInputProcessor(this);
+        //map variables
+        mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
+        mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
 //        //timelapse variables
 //        startTimer = new Timer();
 //        int delay = 1000;

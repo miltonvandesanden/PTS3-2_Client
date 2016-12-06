@@ -5,13 +5,12 @@
  */
 package match2;
 
-import Map.Map;
-import Player.CompetingPlayer;
-import Player.Player;
-import Utils.GameState;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import player2.CompetingPlayer;
+import player2.Player;
+import utils2.GameState;
 
 /**
  *
@@ -24,6 +23,8 @@ public class Match implements Serializable
     private Map map;
     
     private List<Player> players;
+    
+    public static final long serialVersionUID = 1875;
     
     public Match()
     {
@@ -102,5 +103,4 @@ public class Match implements Serializable
     public void setMap(Map map) {
         this.map = map;
     }
-
 }

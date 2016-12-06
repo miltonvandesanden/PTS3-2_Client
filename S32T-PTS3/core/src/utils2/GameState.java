@@ -3,12 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Map;
+package utils2;
+
+import java.io.Serializable;
 
 /**
  *
- * @author Danny
+ * @author Milton van de Sanden
  */
-public enum ObstacleType {
-    WALL, FINISH;
+public enum GameState implements Serializable
+{
+    LOGIN,
+    LOBBY,
+    RACING,
+    LEADERBOARD
 }

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Player;
+package player2;
 
 import java.io.Serializable;
-import Utils.Color;
-import Utils.PlayerState;
+import utils2.Color;
+import utils2.PlayerState;
 import com.badlogic.gdx.graphics.Texture;
 import java.awt.Point;
 
@@ -20,6 +20,8 @@ public class CompetingPlayer extends Player implements ICompetingPlayer, Seriali
     private int currentLap;
     private PlayerState playerState;
     private PlayerCar playerCar;
+    
+    public static final long serialVersionUID = 1875;
 
     public CompetingPlayer(String username, Color color, Point location)
     {

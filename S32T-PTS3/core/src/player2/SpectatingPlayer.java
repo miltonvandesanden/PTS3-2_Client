@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Player;
+package player2;
 
 import java.io.Serializable;
-import Utils.Color;
+import utils2.Color;
 
 /**
  *
@@ -14,6 +14,9 @@ import Utils.Color;
  */
 public class SpectatingPlayer extends Player implements ISpectatingPlayer, Serializable
 {
+    
+    public static final long serialVersionUID = 1875;
+    
     public SpectatingPlayer(String username, Color color)
     {
         super(username, color);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Map;
+package match2;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,10 +14,12 @@ import java.util.List;
  */
 public class Map implements Serializable
 {
-    private String backgroundPath;
+        private String backgroundPath;
     private Obstacle finish;
     private Obstacle finish2;
     private List<Obstacle> walls;
+    
+    public static final long serialVersionUID = 1875;
     
     public Map(String backgroundPath, Obstacle finish, Obstacle finish2, List<Obstacle> walls)
     {
@@ -66,4 +68,5 @@ public class Map implements Serializable
     {
         this.walls = walls;
     }
+
 }

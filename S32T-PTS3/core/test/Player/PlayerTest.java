@@ -5,6 +5,7 @@
  */
 package Player;
 
+import player2.Player;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
