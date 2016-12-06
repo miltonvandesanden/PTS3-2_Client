@@ -89,12 +89,12 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "145.93.34.2";
+    private final String SERVERIP = "169.254.254.48";
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player2";
+    private String username = "player1";
     
     private Sprite selfSprite;
     private Sprite sprite1;

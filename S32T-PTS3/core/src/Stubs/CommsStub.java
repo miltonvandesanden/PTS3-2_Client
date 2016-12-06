@@ -11,6 +11,7 @@ import java.awt.Point;
 import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import player2.Player;
 
 /**
  *
@@ -34,6 +35,15 @@ public class CommsStub extends UnicastRemoteObject implements IComms
         
         competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());
         competingPlayer.getPlayerCar().setRotation(rotation);
+    }
+    
+    @Override
+    public void pushPlayer(Player player) throws RemoteException
+    {
+        if(clientManager.getMainMatch().getPlayer(player.getUsername()) == null)
+        {
+            clientManager.getMainMatch().addPlayer(player);
+        }
     }
 }   
  
