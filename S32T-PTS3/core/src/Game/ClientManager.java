@@ -259,6 +259,15 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        handleLap();
 //        //draw player elements
         self.getPlayerCar().getSprite().draw(batch);
+        
+        for(Player player : mainMatch.getPlayers())
+        {
+            if(player.getClass() == CompetingPlayer.class && player != self)
+            {
+                ((CompetingPlayer) player).getPlayerCar().getSprite().draw(batch);
+            }
+        }
+        
 //        if (mainMatch.getFinishedPlayers() != null) {
 //            if (mainMatch.getCompetingPlayers().size() == mainMatch.getFinishedPlayers().size()) {
 //                mainMatch.endMatch();
