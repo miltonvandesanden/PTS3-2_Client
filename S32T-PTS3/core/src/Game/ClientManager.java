@@ -56,7 +56,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private Texture mapTexture2;
     //Player variables
     private CompetingPlayer self;
-    private List<Player> players;
+//    private List<Player> players;
     private SpriteBatch batch;
     private BitmapFont PlayernameTag;
     private boolean moveUp = false;
@@ -100,7 +100,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private Sprite sprite1;
     private Sprite sprite2;
     private Sprite sprite3;
-    private Sprite sprite4;
     
     public ClientManager()
     {
@@ -284,6 +283,30 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         
         selfSprite.draw(batch);
         
+        int playerCounter = 0;
+        
+        for(Player player : mainMatch.getPlayers())
+        {
+            if(player.getClass() == CompetingPlayer.class && player != self)
+            {
+                
+                switch(playerCounter)
+                {
+                    case 0:
+                        setPosition((CompetingPlayer) player, sprite1);
+                        sprite1.draw(batch);
+                        break;
+                    case 1:
+                        setPosition((CompetingPlayer) player, sprite2);
+                        sprite2.draw(batch);
+                        break;
+                    case 2:
+                        setPosition((CompetingPlayer) player, sprite3);
+                        sprite3.draw(batch);
+                }                
+            }
+        }
+        
 //        for(Player player : mainMatch.getPlayers()
 //        {
 //            if(player.getClass() == CompetingPlayer.class && player != self)
@@ -394,21 +417,21 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         this.self = self;
     }
 
-    public List<Player> getPlayers() {
-        return players;
-    }
+//    public List<Player> getPlayers() {
+//        return players;
+//    }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
+//    public void setPlayers(List<Player> players) {
+//        this.players = players;
+//    }
 
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
+//    public void addPlayer(Player player) {
+//        players.add(player);
+//    }
 
-    public void removePlayer(Player player) {
-        players.remove(player);
-    }
+//    public void removePlayer(Player player) {
+//        players.remove(player);
+//    }
 
     @Override
     public boolean keyDown(int i) {
