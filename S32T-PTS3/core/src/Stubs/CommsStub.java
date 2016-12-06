@@ -40,6 +40,8 @@ public class CommsStub extends UnicastRemoteObject implements IComms
     @Override
     public void pushPlayer(Player player) throws RemoteException
     {
+        System.out.println("" + player.getUsername());
+        
         if(clientManager.getMainMatch().getPlayer(player.getUsername()) == null)
         {
             clientManager.getMainMatch().addPlayer(player);

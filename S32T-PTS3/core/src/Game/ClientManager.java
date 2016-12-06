@@ -94,7 +94,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player2";
+    private String username = "player1";
     
     private Sprite selfSprite;
     private Sprite sprite1;
