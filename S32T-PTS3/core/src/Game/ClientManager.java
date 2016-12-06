@@ -32,6 +32,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import comms.IServerComms;
+import java.awt.Point;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
@@ -40,6 +41,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import player2.PlayerCar;
 
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
 
@@ -164,16 +166,19 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //map variables
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
+        
+
+        
         //timelapse variables
-        startTimer = new Timer();
-        int delay = 1000;
-        int period = 1000;
-        interval = 3;
+//        startTimer = new Timer();
+//        int delay = 1000;
+//        int period = 1000;
+//        interval = 3;
 //        //playervariables
 //        TimeLapsedText = new BitmapFont();
 //        PlayernameTag = new BitmapFont();
 //        StartCountdown = new BitmapFont();
-//        //Startcountdown variables
+////        //Startcountdown variables
 //        StartCountdown.setColor(com.badlogic.gdx.graphics.Color.RED);
 //        StartCountdown.getData().setScale(4);
 //        //timer
@@ -187,8 +192,35 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         batch = new SpriteBatch();
 //        self = new CompetingPlayer("Player1", Utils.Color.BLACK, new Point(350, 665));
         self = (CompetingPlayer) mainMatch.getPlayer(username);
-//        self.getPlayerCar().getSprite().rotate(180);
+        
+        String carPath = "images/car";
+        
+        switch(self.getColor())
+        {
+            case BLUE:
+                carPath += "_blue_3.png";
+                break;
+            case GREEN:
+                carPath += "_green_3.png";
+                break;
+            case RED:
+                carPath += "_red_3.png";
+                break;
+            case YELLOW:
+                carPath += "_yellow_3.png";
+                break;
+            default:
+                carPath += "_black_3.png";
+                break;
+        }
+        
+        self.setPlayerCar(new PlayerCar(new Texture(carPath), new Point(335, 665)));
+        
+        self.getPlayerCar().getSprite().rotate(180);
 //        mainMatch.addCompetingPlayer(self);
+
+
+
 //        //chat variables
 //        chatInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
 //        chatInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
@@ -226,7 +258,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        //hanlelap
 //        handleLap();
 //        //draw player elements
-//        self.getPlayerCar().getSprite().draw(batch);
+        self.getPlayerCar().getSprite().draw(batch);
 //        if (mainMatch.getFinishedPlayers() != null) {
 //            if (mainMatch.getCompetingPlayers().size() == mainMatch.getFinishedPlayers().size()) {
 //                mainMatch.endMatch();
