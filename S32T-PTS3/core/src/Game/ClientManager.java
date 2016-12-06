@@ -9,7 +9,7 @@ import Chat.Chat;
 import Chat.ChatMessage;
 import Map.MapManager;
 import Map.Map;
-import Match.Match;
+import match2.Match;
 import Map.Obstacle;
 import Utils.PlayerState;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -90,7 +90,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "145.93.33.18";
+    private final String SERVERIP = "192.168.178.16";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -141,16 +141,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
         
-        try
-        {
-            serverComms.Login("player1", IP.toString(), PORTNUMBER);
-        } catch (RemoteException ex)
-        {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        logIn("player1");
     }
 
-    public Match logIn(String username)
+    
+    public  Match logIn(String username)
     {
         try
         {
@@ -158,13 +153,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        
-        return null;
     }
     
     @Override
-    public void create() {
+    public void create()
+    {
 //        //play sound
 //        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
 //        sound.play();
@@ -209,7 +204,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     }
 
     @Override
-    public void render() { 
+    public void render()
+    {
 //        //render necessities
 //        Gdx.gl.glClearColor(1, 0, 0, 1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -261,12 +257,12 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //            System.out.println(self.getUsername() + " Current Lap: " + self.getCurrentLap());
         }
 
-        if (self.getCurrentLap() >= mainMatch.getMaxLaps()) {
-            self.setPlayerState(PlayerState.FINISHED);
-            mainMatch.addFinishedPlayer(self);
+       // if (self.getCurrentLap() >= mainMatch.getMaxLaps()) {
+           // self.setPlayerState(PlayerState.FINISHED);
+           // mainMatch.addFinishedPlayer(self);
 //            System.out.println(self.getUsername() + " has finished");
-            Gdx.app.exit();
-        }
+          //  Gdx.app.exit();
+      //  }
     }
 
     private final int setInterval() {

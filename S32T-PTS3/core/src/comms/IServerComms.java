@@ -7,7 +7,7 @@ package comms;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import Match.Match;
+import match2.Match;
 
 /**
  *
