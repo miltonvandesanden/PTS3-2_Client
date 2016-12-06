@@ -30,7 +30,7 @@ public class CompetingPlayer extends Player implements ICompetingPlayer, Seriali
         currentLap = 0;
         playerState = PlayerState.WAITING;
         
-        playerCar = new PlayerCar(new Texture("images/car_black_3.png"),  location);
+        playerCar = new PlayerCar(-90f, location);
     }
     
     @Override

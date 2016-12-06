@@ -31,6 +31,8 @@ import utils2.Projectile;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import comms.IServerComms;
 import java.awt.Point;
 import java.net.InetAddress;
@@ -93,6 +95,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private IServerComms serverComms;
     
     private String username = "player1";
+    
+    private Sprite selfSprite;
+    private Sprite sprite1;
+    private Sprite sprite2;
+    private Sprite sprite3;
+    private Sprite sprite4;
+    
     public ClientManager()
     {
         try
@@ -166,7 +175,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //map variables
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
-        
+       
 
         
         //timelapse variables
@@ -193,9 +202,37 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        self = new CompetingPlayer("Player1", Utils.Color.BLACK, new Point(350, 665));
         self = (CompetingPlayer) mainMatch.getPlayer(username);
         
+        
+//        self.getPlayerCar().setSprite(new Texture(carPath), new Point(335, 665));
+//        mainMatch.addCompetingPlayer(self);
+
+
+
+//        //chat variables
+//        chatInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
+//        chatInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+//        chatInput.setSize(300, 40);
+//        chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
+//
+//        chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
+//        chatBoxContentTemp = new ArrayList<ChatMessage>();
+        setPosition(self, selfSprite);
+    }
+    
+    public void setPosition(CompetingPlayer competingPlayer, Sprite sprite)
+    {
+        selfSprite = generateSprite(competingPlayer);
+        selfSprite.setSize(competingPlayer.getPlayerCar().getRectangle().getWidth(), competingPlayer.getPlayerCar().getRectangle().getHeight());
+        selfSprite.setPosition(competingPlayer.getPlayerCar().getRectangle().getX(), competingPlayer.getPlayerCar().getRectangle().getY());
+        selfSprite.setRotation(competingPlayer.getPlayerCar().getRotation());
+        selfSprite.setOrigin(6.5f, 10f);
+    }
+    
+    public Sprite generateSprite(Player player)
+    {
         String carPath = "images/car";
         
-        switch(self.getColor())
+        switch(player.getColor())
         {
             case BLUE:
                 carPath += "_blue_3.png";
@@ -212,24 +249,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             default:
                 carPath += "_black_3.png";
                 break;
-        }
-        
-        self.setPlayerCar(new PlayerCar(new Texture(carPath), new Point(335, 665)));
-        
-        self.getPlayerCar().getSprite().rotate(180);
-//        mainMatch.addCompetingPlayer(self);
-
-
-
-//        //chat variables
-//        chatInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
-//        chatInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//        chatInput.setSize(300, 40);
-//        chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
-//
-//        chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
-//        chatBoxContentTemp = new ArrayList<ChatMessage>();
-//
+        }        
+        return new Sprite(new Texture(carPath));
     }
 
     @Override
@@ -245,6 +266,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //render map and map elementsjbjhbhjvhg
         renderMap();
 //        //player input to car movement
+        setPosition(self, selfSprite);
 //        if (interval == 0) {
             handleMovement();
 //            toStart = false;
@@ -258,15 +280,17 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        //hanlelap
 //        handleLap();
 //        //draw player elements
-        self.getPlayerCar().getSprite().draw(batch);
+//        self.getPlayerCar().getSprite().draw(batch);
         
-        for(Player player : mainMatch.getPlayers())
-        {
-            if(player.getClass() == CompetingPlayer.class && player != self)
-            {
-                ((CompetingPlayer) player).getPlayerCar().getSprite().draw(batch);
-            }
-        }
+        selfSprite.draw(batch);
+        
+//        for(Player player : mainMatch.getPlayers()
+//        {
+//            if(player.getClass() == CompetingPlayer.class && player != self)
+//            {
+//                ((CompetingPlayer) player).getPlayerCar().getSprite().draw(batch);
+//            }
+//        }
         
 //        if (mainMatch.getFinishedPlayers() != null) {
 //            if (mainMatch.getCompetingPlayers().size() == mainMatch.getFinishedPlayers().size()) {
@@ -309,10 +333,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         return --interval;
     }
 
-    public void DrawPlayername() {
-        PlayernameTag.draw(batch, self.getUsername(), self.getPlayerCar().getSprite().getX(), self.getPlayerCar().getSprite().getY() + 25);
-
-    }
+//    public void DrawPlayername() {
+//        PlayernameTag.draw(batch, self.getUsername(), self.getPlayerCar().getSprite().getX(), self.getPlayerCar().getSprite().getY() + 25);
+//
+//    }
 
     public void Startcountdown(int time) {
         StartCountdown.draw(batch, "" + setInterval(), Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
@@ -323,16 +347,16 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         TimeLapsedText.draw(batch, "" + ((System.currentTimeMillis() - startTime) / 10e2), Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
     }
 
-    public void handleCollision() {
-        for (Obstacle obstacle : mainMatch.getMap().getWalls()) {
-            if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle())) {
-                self.getPlayerCar().getSprite().rotate(180);
-                self.getPlayerCar().moveForward();
-                self.getPlayerCar().getSprite().rotate(180);
-            }
-        }
-
-    }
+//    public void handleCollision() {
+//        for (Obstacle obstacle : mainMatch.getMap().getWalls()) {
+//            if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle())) {
+//                self.getPlayerCar().getSprite().rotate(180);
+//                self.getPlayerCar().moveForward();
+//                self.getPlayerCar().getSprite().rotate(180);
+//            }
+//        }
+//
+//    }
 
     public void renderMap() {
         batch.draw(mapTexture1, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
