@@ -5,7 +5,9 @@
  */
 package Stubs;
 
+import Game.ClientManager;
 import Game.IComms;
+import java.awt.Point;
 import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -16,12 +18,22 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class CommsStub extends UnicastRemoteObject implements IComms
 {   
+    private ClientManager clientManager;
+    
     public CommsStub() throws RemoteException{}
+    
+    public CommsStub(ClientManager clientManager) throws RemoteException
+    {
+        this.clientManager = clientManager;
+    }
 
     @Override
-    public void pushPlayerPosition(CompetingPlayer player) throws RemoteException
+    public void pushPlayerPosition(String username, Point position, float rotation) throws RemoteException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
+        
+        competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());
+        competingPlayer.getPlayerCar().setRotation(rotation);
     }
 }   
  

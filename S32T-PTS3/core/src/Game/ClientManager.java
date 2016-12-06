@@ -94,7 +94,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player1";
+    private String username = "player2";
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -106,7 +106,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         try
         {
             IP = InetAddress.getLocalHost();
-            clientComms = new CommsStub();
+            clientComms = new CommsStub(this);
             
             clientRegistry = LocateRegistry.createRegistry(PORTNUMBER);
             clientRegistry.rebind("Client", clientComms);
@@ -148,6 +148,80 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         }
        mainMatch = logIn(username);
     }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    public void setProjectiles(List<Projectile> projectiles) {
+        this.projectiles = projectiles;
+    }
+
+    public MapManager getMapManager() {
+        return mapManager;
+    }
+
+    public void setMapManager(MapManager mapManager) {
+        this.mapManager = mapManager;
+    }
+
+    public Match getMainMatch() {
+        return mainMatch;
+    }
+
+    public void setMainMatch(Match mainMatch) {
+        this.mainMatch = mainMatch;
+    }
+
+    public Registry getClientRegistry() {
+        return clientRegistry;
+    }
+
+    public void setClientRegistry(Registry clientRegistry) {
+        this.clientRegistry = clientRegistry;
+    }
+
+    public int getPORTNUMBER() {
+        return PORTNUMBER;
+    }
+
+    public void setPORTNUMBER(int PORTNUMBER) {
+        this.PORTNUMBER = PORTNUMBER;
+    }
+
+    public InetAddress getIP() {
+        return IP;
+    }
+
+    public void setIP(InetAddress IP) {
+        this.IP = IP;
+    }
+
+    public Registry getServerRegistry() {
+        return serverRegistry;
+    }
+
+    public void setServerRegistry(Registry serverRegistry) {
+        this.serverRegistry = serverRegistry;
+    }
+
+    public IComms getClientComms() {
+        return clientComms;
+    }
+
+    public void setClientComms(IComms clientComms) {
+        this.clientComms = clientComms;
+    }
+
+    public IServerComms getServerComms() {
+        return serverComms;
+    }
+
+    public void setServerComms(IServerComms serverComms) {
+        this.serverComms = serverComms;
+    }
+    
+    
 
     
     public  Match logIn(String username)
