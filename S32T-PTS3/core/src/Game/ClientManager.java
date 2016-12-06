@@ -89,7 +89,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private IComms clientComms;
     private IServerComms serverComms;
-
+    
+    private String username = "player1";
     public ClientManager()
     {
         try
@@ -135,7 +136,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
-       mainMatch = logIn("player1");
+       mainMatch = logIn(username);
     }
 
     
@@ -144,7 +145,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
         try
         {
-             return serverComms.Login(username, "localhost", PORTNUMBER);
+             return serverComms.Login(username, IP.getHostAddress(), PORTNUMBER);
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -164,10 +165,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
         //timelapse variables
-//        startTimer = new Timer();
-//        int delay = 1000;
-//        int period = 1000;
-//        interval = 3;
+        startTimer = new Timer();
+        int delay = 1000;
+        int period = 1000;
+        interval = 3;
 //        //playervariables
 //        TimeLapsedText = new BitmapFont();
 //        PlayernameTag = new BitmapFont();
@@ -185,6 +186,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        //playervariables
         batch = new SpriteBatch();
 //        self = new CompetingPlayer("Player1", Utils.Color.BLACK, new Point(350, 665));
+        self = (CompetingPlayer) mainMatch.getPlayer(username);
 //        self.getPlayerCar().getSprite().rotate(180);
 //        mainMatch.addCompetingPlayer(self);
 //        //chat variables
@@ -211,7 +213,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //render map and map elementsjbjhbhjvhg
         renderMap();
 //        //player input to car movement
-//
 //        if (interval == 0) {
 //            handleMovement();
 //            toStart = false;
