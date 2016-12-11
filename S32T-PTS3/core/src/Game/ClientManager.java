@@ -482,7 +482,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         self.getPlayerCar().moveForward();
         try
         {
-            clientComms.pushPlayerPosition(username, new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
+            serverComms.pushPosition(username, new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);

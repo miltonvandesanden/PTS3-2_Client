@@ -12,6 +12,7 @@ import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import player2.Player;
+import utils2.Color;
 
 /**
  *
@@ -33,19 +34,16 @@ public class CommsStub extends UnicastRemoteObject implements IComms
     {
         CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
         
-        competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());
-        competingPlayer.getPlayerCar().setRotation(rotation);
-    }
-    
-    @Override
-    public void pushPlayer(Player player) throws RemoteException
-    {
-        System.out.println("" + player.getUsername());
-        
-        if(clientManager.getMainMatch().getPlayer(player.getUsername()) == null)
+        if(competingPlayer != null)
         {
-            clientManager.getMainMatch().addPlayer(player);
+            competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());
+            competingPlayer.getPlayerCar().setRotation(rotation);            
         }
-    }
+        else
+        {
+            competingPlayer = new CompetingPlayer(username, Color.BLUE, position);
+            clientManager.getMainMatch().addPlayer(competingPlayer);
+        }
+    }    
 }   
  
