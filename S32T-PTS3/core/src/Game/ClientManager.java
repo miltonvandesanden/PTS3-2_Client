@@ -89,12 +89,12 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "169.254.254.48";
+    private final String SERVERIP = "192.168.1.109";
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player1";
+    private String username = "player2";
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -147,6 +147,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
        mainMatch = logIn(username);
+       self = (CompetingPlayer) mainMatch.getPlayer(username);
     }
 
     public List<Projectile> getProjectiles() {
@@ -273,7 +274,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        //playervariables
         batch = new SpriteBatch();
 //        self = new CompetingPlayer("Player1", Utils.Color.BLACK, new Point(350, 665));
-        self = (CompetingPlayer) mainMatch.getPlayer(username);
+
         
         
 //        self.getPlayerCar().setSprite(new Texture(carPath), new Point(335, 665));
@@ -482,7 +483,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         self.getPlayerCar().moveForward();
         try
         {
-            serverComms.pushPosition(username, new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
+            System.out.println(self.getUsername());
+            serverComms.pushPosition(self.getUsername(), new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
