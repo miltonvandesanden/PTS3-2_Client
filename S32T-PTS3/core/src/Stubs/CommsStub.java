@@ -32,9 +32,9 @@ public class CommsStub extends UnicastRemoteObject implements IComms
     @Override
     public void pushPlayerPosition(String username, Point position, float rotation) throws RemoteException
     {
-       clientManager.getSelf().getUsername();
-        if(!username.equals(clientManager.getSelf().getUsername()))
-        {
+     
+//        if(!username.equals(clientManager.getSelf().getUsername()))
+//        {
             CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
 
             if(competingPlayer != null)
@@ -45,9 +45,10 @@ public class CommsStub extends UnicastRemoteObject implements IComms
             else
             {
                 competingPlayer = new CompetingPlayer(username, Color.BLUE, position);
+                competingPlayer.getPlayerCar().setRotation(rotation);
                 clientManager.getMainMatch().addPlayer(competingPlayer);
             }
         }
     }
-}   
+
  
