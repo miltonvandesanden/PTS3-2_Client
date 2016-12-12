@@ -94,7 +94,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player3";
+    private String username = "player1";
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -352,7 +352,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //
 //        }
 //        //collision handeling
-//        handleCollision();
+       handleCollision();
 //        //hanlelap
 //        handleLap();
 //        //draw player elements
@@ -449,16 +449,18 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         TimeLapsedText.draw(batch, "" + ((System.currentTimeMillis() - startTime) / 10e2), Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
     }
 
-//    public void handleCollision() {
-//        for (Obstacle obstacle : mainMatch.getMap().getWalls()) {
-//            if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle())) {
+    public void handleCollision()
+    {
+        for (Obstacle obstacle : mainMatch.getMap().getWalls()) {
+            if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle())) {
 //                self.getPlayerCar().getSprite().rotate(180);
-//                self.getPlayerCar().moveForward();
-//                self.getPlayerCar().getSprite().rotate(180);
-//            }
-//        }
-//
-//    }
+                self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
+                self.getPlayerCar().moveForward();
+                self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
+            }
+        }
+
+    }
 
     public void renderMap() {
         batch.draw(mapTexture1, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

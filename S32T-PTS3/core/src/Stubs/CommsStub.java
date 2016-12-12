@@ -34,9 +34,11 @@ public class CommsStub extends UnicastRemoteObject implements IComms
     {
      
 //        if(!username.equals(clientManager.getSelf().getUsername()))
-//        {
+//        
+      // System.out.println(clientManager.getMainMatch().getPlayer(username));
+        //clientManager.getMainMatch().getPlayer(username);
             CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
-
+            
             if(competingPlayer != null)
             {
                 competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());

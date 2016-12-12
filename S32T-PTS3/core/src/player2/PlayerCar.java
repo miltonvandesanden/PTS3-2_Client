@@ -20,7 +20,7 @@ public class PlayerCar implements Serializable
 {
     private float speed;
     private static final float MAXSPEED = 4.5f;
-    private static final float ACCELERATION = 1.05f;
+    private static final float ACCELERATION = 1.01f;
     
     private float rotation;
     private Rectangle rectangle;
