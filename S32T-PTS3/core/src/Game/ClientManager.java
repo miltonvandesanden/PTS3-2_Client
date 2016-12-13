@@ -42,6 +42,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils2.PlayerState;
 
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
 
@@ -92,7 +93,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player1";
+    private String username = "player2";
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -146,6 +147,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         }
        mainMatch = logIn(username);
        self = (CompetingPlayer) mainMatch.getPlayer(username);
+       self.setPlayerState(PlayerState.RACING);
     }
 
     public List<Projectile> getProjectiles() {
@@ -348,8 +350,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //
 //        }
 //        //collision handeling
-       handleCollision();
-       handleLap();
+        handleCollision();
+        handleLap();
         
         selfSprite.draw(batch);
         
@@ -401,24 +403,38 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         batch.end();
     }
 
-    public void handleLap() {
-        if (!halfLap && mainMatch.getMap().getFinish2().getBox().overlaps(self.getPlayerCar().getRectangle())) {
-            halfLap = true;
-//            System.out.println(self.getUsername() + " is halfway");
-        }
+    public void handleLap()
+    {
+        if(self.getPlayerState() == PlayerState.RACING)
+        {
+            if (!halfLap && mainMatch.getMap().getFinish2().getBox().overlaps(self.getPlayerCar().getRectangle())) {
+                halfLap = true;
+                System.out.println(self.getUsername() + " is halfway");
+            }
 
-        if (halfLap && mainMatch.getMap().getFinish().getBox().overlaps(self.getPlayerCar().getRectangle())) {
-            halfLap = false;
-            self.setCurrentLap(self.getCurrentLap() + 1);
-//            System.out.println(self.getUsername() + " Current Lap: " + self.getCurrentLap());
-        }
+            if (halfLap && mainMatch.getMap().getFinish().getBox().overlaps(self.getPlayerCar().getRectangle())) {
+                halfLap = false;
+                self.setCurrentLap(self.getCurrentLap() + 1);
+                System.out.println(self.getUsername() + " Current Lap: " + self.getCurrentLap());
+            }
 
-       // if (self.getCurrentLap() >= mainMatch.getMaxLaps()) {
-           // self.setPlayerState(PlayerState.FINISHED);
-           // mainMatch.addFinishedPlayer(self);
-//            System.out.println(self.getUsername() + " has finished");
-          //  Gdx.app.exit();
-      //  }
+            if (self.getCurrentLap() >= mainMatch.MAXLAPS)
+            {
+                self.setPlayerState(PlayerState.FINISHED);
+
+                try
+                {
+                    serverComms.pushFinish(self.getUsername());
+                }
+                catch (RemoteException ex)
+                {
+                    Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+    //            mainMatch.addFinishedPlayer(self);
+                System.out.println(self.getUsername() + " has finished");
+    //            Gdx.app.exit();
+            }
+        }
     }
 
     private int setInterval() {
@@ -460,31 +476,34 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         batch.draw(mapTexture2, mainMatch.getMap().getFinish().getBox().x, mainMatch.getMap().getFinish().getBox().y, mainMatch.getMap().getFinish().getBox().width, mainMatch.getMap().getFinish().getBox().height);
     }
 
-    public void handleMovement(){
-        if (moveUp) {
-            self.getPlayerCar().increaseSpeed();
-        } else {
-            self.getPlayerCar().decreaseSpeed();
-        }
-
-        if (moveRight) {
-            self.getPlayerCar().turnRight();
-        }
-
-        if (moveLeft) {
-            self.getPlayerCar().turnLeft();
-        }
-
-        self.getPlayerCar().moveForward();
-        try
+    public void handleMovement()
+    {
+        if(self.getPlayerState() == PlayerState.RACING)
         {
-//            System.out.println(self.getUsername());
-            serverComms.pushPosition(self.getUsername(), new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
-        } catch (RemoteException ex)
-        {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+            if (moveUp) {
+                self.getPlayerCar().increaseSpeed();
+            } else {
+                self.getPlayerCar().decreaseSpeed();
+            }
+
+            if (moveRight) {
+                self.getPlayerCar().turnRight();
+            }
+
+            if (moveLeft) {
+                self.getPlayerCar().turnLeft();
+            }
+
+            self.getPlayerCar().moveForward();
+            try
+            {
+    //            System.out.println(self.getUsername());
+                serverComms.pushPosition(self.getUsername(), new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
+            } catch (RemoteException ex)
+            {
+                Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
     }
 
     @Override

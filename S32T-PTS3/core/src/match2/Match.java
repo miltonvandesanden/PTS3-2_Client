@@ -19,19 +19,18 @@ import utils2.GameState;
 public class Match implements Serializable
 {
     private GameState gameState;
-    
     private Map map;
-    
     private List<Player> players;
+    public final int MAXLAPS = 1;
     
     public static final long serialVersionUID = 1875;
     
     public Match()
     {
         gameState = GameState.LOBBY;
-        
         players = new ArrayList<>();
     }
+    
 
     public GameState getGameState() {
         return gameState;

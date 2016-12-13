@@ -102,7 +102,8 @@ public class PlayerCar implements Serializable
     {
         if (speed > 0)
         {
-            speed -= speed/10;
+//            speed -= speed/10;
+            speed = 0;
         }
     }
     
