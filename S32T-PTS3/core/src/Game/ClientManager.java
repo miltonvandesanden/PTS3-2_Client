@@ -465,7 +465,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //                self.getPlayerCar().getSprite().rotate(180);
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
                 self.getPlayerCar().moveForward();
-                self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
+                self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 220);
             }
         }
 
