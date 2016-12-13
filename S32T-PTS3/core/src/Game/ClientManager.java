@@ -8,7 +8,6 @@ package Game;
 import Chat.Chat;
 import Chat.ChatMessage;
 import match2.MapManager;
-import match2.Map;
 import match2.Match;
 import match2.Obstacle;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -32,7 +31,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import comms.IServerComms;
 import java.awt.Point;
 import java.net.InetAddress;
@@ -43,7 +42,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import player2.PlayerCar;
 
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
 
@@ -89,7 +87,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "192.168.1.109";
+    private final String SERVERIP = "145.93.33.242";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -282,14 +280,14 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
 
 
-//        //chat variables
-//        chatInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
-//        chatInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-//        chatInput.setSize(300, 40);
-//        chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
-//
-//        chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
-//        chatBoxContentTemp = new ArrayList<ChatMessage>();
+        //chat variables
+        chatInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
+        chatInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        chatInput.setSize(300, 40);
+        chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
+
+        chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
+        chatBoxContentTemp = new ArrayList<>();
         setPosition(self, selfSprite);
     }
     
@@ -337,8 +335,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
 
-//        //garbage collector 
-//        System.gc();
         //render map and map elementsjbjhbhjvhg
         renderMap();
 //        //player input to car movement
@@ -353,10 +349,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        }
 //        //collision handeling
        handleCollision();
-//        //hanlelap
-//        handleLap();
-//        //draw player elements
-//        self.getPlayerCar().getSprite().draw(batch);
+       handleLap();
         
         selfSprite.draw(batch);
         
@@ -428,7 +421,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
       //  }
     }
 
-    private final int setInterval() {
+    private int setInterval() {
         if (interval == 1) {
             startTimer.cancel();
         }
@@ -485,7 +478,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         self.getPlayerCar().moveForward();
         try
         {
-            System.out.println(self.getUsername());
+//            System.out.println(self.getUsername());
             serverComms.pushPosition(self.getUsername(), new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
         } catch (RemoteException ex)
         {
