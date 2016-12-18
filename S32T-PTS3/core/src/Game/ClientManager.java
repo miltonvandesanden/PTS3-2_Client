@@ -42,6 +42,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import player2.SpectatingPlayer;
 import utils2.PlayerState;
 
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
@@ -55,6 +56,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private Texture mapTexture2;
     //Player variables
     private CompetingPlayer self;
+    private SpectatingPlayer self2;
 //    private List<Player> players;
     private SpriteBatch batch;
     private BitmapFont PlayernameTag;
@@ -88,12 +90,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "169.254.254.48";
+    private final String SERVERIP = "192.168.178.16";
     
     private IComms clientComms;
     private IServerComms serverComms;
     
     private String username = "player1";
+    private boolean isCompeting = false;
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -114,10 +117,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             System.out.println("IP: " + IP.toString());
             System.out.println("Port: " + PORTNUMBER);
             
-//        mapManager = new MapManager();
-//        players = new ArrayList<>();
-//        map = mapManager.maps.get(1);
-//        mainMatch = new Match(null, new ArrayList<>(), map, 10000L, 3);
         } catch (RemoteException | UnknownHostException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,9 +144,21 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
         }
-       mainMatch = logIn(username);
-       self = (CompetingPlayer) mainMatch.getPlayer(username);
-       self.setPlayerState(PlayerState.RACING);
+       mainMatch = logIn(username, isCompeting);
+       
+       
+       
+       
+       
+       if(mainMatch.getPlayer(username).getClass() == CompetingPlayer.class)
+       {
+           self = (CompetingPlayer) mainMatch.getPlayer(username);
+           self.setPlayerState(PlayerState.RACING);
+       }
+       else
+       {
+           self2 = (SpectatingPlayer) mainMatch.getPlayer(username);
+       }
     }
 
     public List<Projectile> getProjectiles() {
@@ -222,15 +233,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         this.serverComms = serverComms;
     }
     
-    
-
-    
-    public  Match logIn(String username)
-    {        
-
+    public  Match logIn(String username, boolean isCompeting)
+    {
         try
         {
-             return serverComms.Login(username, IP.getHostAddress(), PORTNUMBER);
+             return serverComms.Login(username, isCompeting, IP.getHostAddress(), PORTNUMBER);
         } catch (RemoteException ex)
         {
             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -290,7 +297,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
         chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
         chatBoxContentTemp = new ArrayList<>();
-        setPosition(self, selfSprite);
+        if(self != null)
+        {
+            setPosition(self, selfSprite);
+        }
     }
     
     public Sprite setPosition(CompetingPlayer competingPlayer, Sprite sprite)
@@ -304,7 +314,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         return sprite;
     }
     
-    public Sprite generateSprite(Player player)
+    public Sprite generateSprite(CompetingPlayer player)
     {
         String carPath = "images/car";
         
@@ -340,9 +350,18 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //render map and map elementsjbjhbhjvhg
         renderMap();
 //        //player input to car movement
-        selfSprite = setPosition(self, selfSprite);
-//        if (interval == 0) {
+        if(self != null)
+        {
+            selfSprite = setPosition((CompetingPlayer) self, selfSprite);
+
             handleMovement();
+            handleCollision();
+            handleLap();
+
+            selfSprite.draw(batch);
+        }
+//        if (interval == 0) {
+            
 //            toStart = false;
 //
 //        } else {
@@ -350,10 +369,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //
 //        }
 //        //collision handeling
-        handleCollision();
-        handleLap();
         
-        selfSprite.draw(batch);
         
         int playerCounter = 0;
         
@@ -397,8 +413,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        DrawPlayername();
 //        //Displays game timelapse 
 //        DisplayTimeLapsed();
-//        chatBox.draw(batch, totalTime);
-//        chatInput.draw(batch, totalTime);
+        chatBox.draw(batch, totalTime);
+        chatInput.draw(batch, totalTime);
 //        handleShooting();
         batch.end();
     }
@@ -415,6 +431,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             if (halfLap && mainMatch.getMap().getFinish().getBox().overlaps(self.getPlayerCar().getRectangle())) {
                 halfLap = false;
                 self.setCurrentLap(self.getCurrentLap() + 1);
+                
                 System.out.println(self.getUsername() + " Current Lap: " + self.getCurrentLap());
             }
 
@@ -430,9 +447,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                 {
                     Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
-    //            mainMatch.addFinishedPlayer(self);
+                
                 System.out.println(self.getUsername() + " has finished");
-    //            Gdx.app.exit();
             }
         }
     }
@@ -582,7 +598,18 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                         }
                        
                     } else {
-                        chatBoxContentTemp.add(new ChatMessage(chatInput.getText(),self.getUsername(),Color.WHITE));
+                        String username = "";
+                        
+                        if(self != null)
+                        {
+                            username = self.getUsername();
+                        }
+                        else
+                        {
+                            username = self2.getUsername();
+                        }
+                        
+                        chatBoxContentTemp.add(new ChatMessage(chatInput.getText(),username,Color.WHITE));
                         chatBox.clear();
                         for(ChatMessage chatmessage: chatBoxContentTemp)
                         {

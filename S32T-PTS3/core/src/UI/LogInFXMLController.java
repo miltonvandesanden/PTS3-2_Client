@@ -38,7 +38,7 @@ public class LogInFXMLController implements Initializable {
     private void JoinLobby(ActionEvent event) {
         String UserName = tfUserName.getText();
         ClientManager clientManager = new ClientManager();
-        clientManager.logIn(UserName);
+        //clientManager.logIn(UserName);
     }
     
 }
