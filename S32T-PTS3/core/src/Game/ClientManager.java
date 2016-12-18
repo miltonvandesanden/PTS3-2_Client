@@ -88,12 +88,12 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "145.93.33.242";
+    private final String SERVERIP = "169.254.254.48";
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player2";
+    private String username = "player1";
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -460,15 +460,19 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
     public void handleCollision()
     {
-        for (Obstacle obstacle : mainMatch.getMap().getWalls()) {
-            if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle())) {
-//                self.getPlayerCar().getSprite().rotate(180);
+        boolean isColliding = false;
+        
+        for (Obstacle obstacle : mainMatch.getMap().getWalls())
+        {
+            if (obstacle.getBox().overlaps(self.getPlayerCar().getRectangle()) && !isColliding)
+            {
+                isColliding = true;
+                
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
                 self.getPlayerCar().moveForward();
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 220);
             }
         }
-
     }
 
     public void renderMap() {
