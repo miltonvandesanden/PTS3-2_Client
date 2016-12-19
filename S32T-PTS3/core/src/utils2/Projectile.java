@@ -10,12 +10,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.io.Serializable;
 
 /**
  *
  * @author Danny
  */
-public class Projectile {
+public class Projectile implements Serializable{
     
         private float x, y, speed;
 	private boolean remove;
@@ -25,6 +26,7 @@ public class Projectile {
         private boolean firstLocation = true;
         float dirX;
         float dirY;
+        public static final long serialVersionUID = 1875;
 	public Projectile(float startX, float startY, PlayerCar c){
 		x = startX;
 		y = startY;
