@@ -5,8 +5,6 @@
  */
 package Game;
 
-import Chat.Chat;
-import Chat.ChatMessage;
 import match2.MapManager;
 import match2.Match;
 import match2.Obstacle;
@@ -78,9 +76,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     //Chat variables
     private TextField chatInput;
     private boolean pressedEnter = false;
-    private Chat chatSystem;
     private Table chatBox;
-    private List<ChatMessage> chatBoxContentTemp;
 
     boolean temp = false;
     
@@ -90,13 +86,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "192.168.178.16";
+    private final String SERVERIP = "145.93.33.181";
     
     private IComms clientComms;
     private IServerComms serverComms;
     
     private String username = "player1";
-    private boolean isCompeting = false;
+    private boolean isCompeting = true;
     
     private Sprite selfSprite;
     private Sprite sprite1;
@@ -296,7 +292,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
 
         chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
-        chatBoxContentTemp = new ArrayList<>();
         if(self != null)
         {
             setPosition(self, selfSprite);
@@ -579,20 +574,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                     chatInput.appendText("a");
                 }
                 break;
-
-            case Input.Keys.ENTER:
-                if (pressedEnter == false)
-                {
-                    pressedEnter = true;
-                    chatInput.setText("");
-                }
-                else
-                {
-                    BroadcastChatmessage(new ChatMessage(chatInput.getText(),self.getUsername(),Color.WHITE));
-                    pressedEnter = false;
-                }
-                break;
-
         }
         if (pressedEnter == true) {
             switch (i) {
@@ -743,41 +724,5 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
          {
              p.render(batch);
          }
-     }
-    
-     public void BroadcastChatmessage(ChatMessage chatmessage)
-    {
-        try {
-            serverComms.broadcastChatmessage(chatmessage);
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-     
-    public void ReceiveNewChatmessage(ChatMessage chatmessageparamater)
-    {
-        if (chatBoxContentTemp.size() == 3)
-        {
-            chatBoxContentTemp.remove(0);
-            chatBoxContentTemp.add(chatmessageparamater);
-            chatBox.clear();
-            for(ChatMessage chatmessage: chatBoxContentTemp)
-            {
-                chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                chatBox.row();
-            }
-        }
-        else
-        {
-            chatBoxContentTemp.add(chatmessageparamater);
-            chatBox.clear();
-            for(ChatMessage chatmessage: chatBoxContentTemp)
-            {
-                chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                chatBox.row();
-            }
-        }
-        chatInput.setText("<PRESS ENTER TO TYPE>");
-    }
-     
+     }    
 }

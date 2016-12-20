@@ -5,7 +5,6 @@
  */
 package Stubs;
 
-import Chat.ChatMessage;
 import Game.ClientManager;
 import Game.IComms;
 import java.awt.Point;
@@ -32,34 +31,22 @@ public class CommsStub extends UnicastRemoteObject implements IComms
 
     @Override
     public void pushPlayerPosition(String username, Point position, float rotation) throws RemoteException
-    {
-     
-//        if(!username.equals(clientManager.getSelf().getUsername()))
-//        
-      // System.out.println(clientManager.getMainMatch().getPlayer(username));
-        //clientManager.getMainMatch().getPlayer(username);
-            CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
-            
-            if(competingPlayer != null)
-            {
-                competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());
-                competingPlayer.getPlayerCar().setRotation(rotation);            
-            }
-            else
-            {
-                competingPlayer = new CompetingPlayer(username, Color.BLUE, position);
-                competingPlayer.getPlayerCar().setRotation(rotation);
-                clientManager.getMainMatch().addPlayer(competingPlayer);
-            }
-        }
+    {     
+        CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
 
-    @Override
-    public void receiveNewChatmessage(ChatMessage chatmessage) throws RemoteException {
-   
-        clientManager.ReceiveNewChatmessage(chatmessage);
-    
+        if(competingPlayer != null)
+        {
+            competingPlayer.getPlayerCar().getRectangle().setPosition((float) position.getX(), (float) position.getY());
+            competingPlayer.getPlayerCar().setRotation(rotation);            
+        }
+        else
+        {
+            competingPlayer = new CompetingPlayer(username, Color.BLUE, position);
+            competingPlayer.getPlayerCar().setRotation(rotation);
+            clientManager.getMainMatch().addPlayer(competingPlayer);
+        }
     }
-    }
+}
 
 
  
