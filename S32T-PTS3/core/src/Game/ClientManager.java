@@ -27,6 +27,7 @@ import Stubs.CommsStub;
 import utils2.Projectile;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -87,7 +88,7 @@ private List<Chatmessage> chatBoxContentTemp;
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "192.168.190.1";
+    private final String SERVERIP = "169.254.254.48";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -518,7 +519,10 @@ private List<Chatmessage> chatBoxContentTemp;
             try
             {
     //            System.out.println(self.getUsername());
-                serverComms.pushPosition(self.getUsername(), new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
+                if(mainMatch != null)
+                {
+                    serverComms.pushPosition(self.getUsername(), new Point((int)self.getPlayerCar().getRectangle().x, (int)self.getPlayerCar().getRectangle().y), self.getPlayerCar().getRotation());
+                }
             } catch (RemoteException ex)
             {
                 Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -588,7 +592,7 @@ private List<Chatmessage> chatBoxContentTemp;
                     chatInput.setText("");
                 } else {
             try {
-                BroadcastChatmessage(new Chatmessage(chatInput.getText(),self.getUsername(),Color.WHITE));
+                BroadcastChatmessage(new Chatmessage(chatInput.getText(),self.getUsername(), Color.WHITE));
             } catch (RemoteException ex) {
                 Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
             }
