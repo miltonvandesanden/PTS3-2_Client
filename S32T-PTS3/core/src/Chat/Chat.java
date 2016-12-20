@@ -15,36 +15,36 @@ import java.util.List;
  */
 public class Chat implements IChat
 {
-    private List<Chatmessage> ChatMessages;
+    private List<ChatMessage> ChatMessages;
 
-    public List<Chatmessage> getChatMessages() {
+    public List<ChatMessage> getChatMessages() {
         return ChatMessages;
     }
 
-    public void setChatMessages(List<Chatmessage> ChatMessages) {
+    public void setChatMessages(List<ChatMessage> ChatMessages) {
         this.ChatMessages = ChatMessages;
     }
 
-    public Chat(List<Chatmessage> ChatMessages) {
+    public Chat(List<ChatMessage> ChatMessages) {
         this.ChatMessages = new ArrayList<>();
     }
     
     
-    public void receiveMessage(Chatmessage chatMessage) {
+    public void receiveMessage(ChatMessage chatMessage) {
         ChatMessages.add(chatMessage);
     }
     
-    public void sendMessage(Chatmessage chatMessage) {
+    public void sendMessage(ChatMessage chatMessage) {
         //guf
     }
 
     @Override
-    public void ReceiveMessage(Chatmessage chatMessage) {
+    public void ReceiveMessage(ChatMessage chatMessage) {
         ChatMessages.add(chatMessage);
     }
 
     @Override
-    public void SendMessage(Chatmessage chatMessage, Player self) {
+    public void SendMessage(ChatMessage chatMessage, Player self) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

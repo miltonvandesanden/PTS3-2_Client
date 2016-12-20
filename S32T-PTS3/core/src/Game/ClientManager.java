@@ -6,7 +6,7 @@
 package Game;
 
 import Chat.Chat;
-import Chat.Chatmessage;
+import Chat.ChatMessage;
 import match2.MapManager;
 import match2.Match;
 import match2.Obstacle;
@@ -80,7 +80,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private boolean pressedEnter = false;
     private Chat chatSystem;
     private Table chatBox;
-    private List<Chatmessage> chatBoxContentTemp;
+    private List<ChatMessage> chatBoxContentTemp;
 
     boolean temp = false;
     
@@ -581,21 +581,14 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                 break;
 
             case Input.Keys.ENTER:
-
-                            if (pressedEnter == false) {
+                if (pressedEnter == false)
+                {
                     pressedEnter = true;
-
                     chatInput.setText("");
-                } else {
-            try {
-                BroadcastChatmessage(new Chatmessage(chatInput.getText(),self.getUsername(),Color.WHITE));
-            } catch (RemoteException ex) {
-                Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                 
-               
-
-                   
+                }
+                else
+                {
+                    BroadcastChatmessage(new ChatMessage(chatInput.getText(),self.getUsername(),Color.WHITE));
                     pressedEnter = false;
                 }
                 break;
@@ -752,36 +745,39 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
          }
      }
     
-     public void BroadcastChatmessage(Chatmessage chatmessage) throws RemoteException
+     public void BroadcastChatmessage(ChatMessage chatmessage)
     {
-     serverComms.broadcastChatmessage(chatmessage);
+        try {
+            serverComms.broadcastChatmessage(chatmessage);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
      
-     public void ReceiveNewChatmessage(Chatmessage chatmessageparamater)
+    public void ReceiveNewChatmessage(ChatMessage chatmessageparamater)
     {
-    if (chatBoxContentTemp.size() == 3) {
-                       chatBoxContentTemp.remove(0);
-                         chatBoxContentTemp.add(chatmessageparamater);
-                        chatBox.clear();
-                        for(Chatmessage chatmessage: chatBoxContentTemp)
-                        {
-                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                        chatBox.row();
-                        }
-                       
-                    } else {
-                        chatBoxContentTemp.add(chatmessageparamater);
-                        chatBox.clear();
-                        for(Chatmessage chatmessage: chatBoxContentTemp)
-                        {
-                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                        chatBox.row();
-                        }
-                        
-                      
-                        
-                    }
-     chatInput.setText("<PRESS ENTER TO TYPE>");
+        if (chatBoxContentTemp.size() == 3)
+        {
+            chatBoxContentTemp.remove(0);
+            chatBoxContentTemp.add(chatmessageparamater);
+            chatBox.clear();
+            for(ChatMessage chatmessage: chatBoxContentTemp)
+            {
+                chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                chatBox.row();
+            }
+        }
+        else
+        {
+            chatBoxContentTemp.add(chatmessageparamater);
+            chatBox.clear();
+            for(ChatMessage chatmessage: chatBoxContentTemp)
+            {
+                chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                chatBox.row();
+            }
+        }
+        chatInput.setText("<PRESS ENTER TO TYPE>");
     }
      
 }

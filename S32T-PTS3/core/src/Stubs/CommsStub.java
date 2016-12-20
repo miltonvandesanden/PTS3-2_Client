@@ -5,7 +5,7 @@
  */
 package Stubs;
 
-import Chat.Chatmessage;
+import Chat.ChatMessage;
 import Game.ClientManager;
 import Game.IComms;
 import java.awt.Point;
@@ -54,7 +54,7 @@ public class CommsStub extends UnicastRemoteObject implements IComms
         }
 
     @Override
-    public void receiveNewChatmessage(Chatmessage chatmessage) throws RemoteException {
+    public void receiveNewChatmessage(ChatMessage chatmessage) throws RemoteException {
    
         clientManager.ReceiveNewChatmessage(chatmessage);
     
