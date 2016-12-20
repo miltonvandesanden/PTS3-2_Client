@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import com.badlogic.gdx.graphics.Color;
 import player2.CompetingPlayer;
 import player2.Player;
 import Stubs.CommsStub;
@@ -40,6 +39,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import player2.PlayerCar;
 import player2.SpectatingPlayer;
 import utils2.PlayerState;
 
@@ -363,9 +363,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //            StartCountdown.draw(batch, "" + interval, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 //
 //        }
-//        //collision handeling
-        
-        
+
         int playerCounter = 0;
         
         for(Player player : mainMatch.getPlayers())
@@ -480,7 +478,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                 isColliding = true;
                 
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
+                float speed = self.getPlayerCar().getSpeed();
+                self.getPlayerCar().setSpeed(PlayerCar.MAXSPEED);
                 self.getPlayerCar().moveForward();
+                self.getPlayerCar().setSpeed(speed);
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 220);
             }
         }
@@ -501,11 +502,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                 self.getPlayerCar().decreaseSpeed();
             }
 
-            if (moveRight) {
+            if (moveRight)
+            {
                 self.getPlayerCar().turnRight();
             }
 
-            if (moveLeft) {
+            if (moveLeft)
+            {
                 self.getPlayerCar().turnLeft();
             }
 

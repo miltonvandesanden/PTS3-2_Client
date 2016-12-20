@@ -5,8 +5,6 @@
  */
 package player2;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import java.awt.Point;
@@ -19,8 +17,8 @@ import java.io.Serializable;
 public class PlayerCar implements Serializable
 {
     private float speed;
-    private static final float MAXSPEED = 4.5f;
-    private static final float ACCELERATION = 1.01f;
+    public static final float MAXSPEED = 4.5f;
+    private static final float ACCELERATION = 1.02f;
     
     private float rotation;
     private Rectangle rectangle;
@@ -61,10 +59,7 @@ public class PlayerCar implements Serializable
 
     public void turnLeft()
     {
-        if (speed > 1)
-        {
-            rotation += 5f;
-        }
+        rotation += 5f;
     }
     
     public float getSpeed()
@@ -74,12 +69,17 @@ public class PlayerCar implements Serializable
 
     public void setSpeed(float speed)
     {
-        if(speed > MAXSPEED)
+        this.speed = speed;
+        
+        if(this.speed > MAXSPEED)
         {
-            throw new IllegalArgumentException();
+            this.speed = MAXSPEED;
         }
         
-        this.speed = speed;
+        if(this.speed < 0)
+        {
+            this.speed = 0;
+        }
     }
         
     public void increaseSpeed()
