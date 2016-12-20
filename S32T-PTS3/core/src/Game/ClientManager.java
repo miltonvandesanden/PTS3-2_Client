@@ -6,7 +6,7 @@
 package Game;
 
 import Chat.Chat;
-import Chat.ChatMessage;
+import Chat.Chatmessage;
 import match2.MapManager;
 import match2.Match;
 import match2.Obstacle;
@@ -80,7 +80,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private boolean pressedEnter = false;
     private Chat chatSystem;
     private Table chatBox;
-    private List<ChatMessage> chatBoxContentTemp;
+    private List<Chatmessage> chatBoxContentTemp;
 
     boolean temp = false;
     
@@ -582,45 +582,20 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
             case Input.Keys.ENTER:
 
-                if (pressedEnter == false) {
+                            if (pressedEnter == false) {
                     pressedEnter = true;
 
                     chatInput.setText("");
                 } else {
-                    if (chatBoxContentTemp.size() == 3) {
-                       chatBoxContentTemp.remove(0);
-                         chatBoxContentTemp.add(new ChatMessage(chatInput.getText(),self.getUsername(),Color.WHITE));
-                        chatBox.clear();
-                        for(ChatMessage chatmessage: chatBoxContentTemp)
-                        {
-                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                        chatBox.row();
-                        }
-                       
-                    } else {
-                        String username = "";
-                        
-                        if(self != null)
-                        {
-                            username = self.getUsername();
-                        }
-                        else
-                        {
-                            username = self2.getUsername();
-                        }
-                        
-                        chatBoxContentTemp.add(new ChatMessage(chatInput.getText(),username,Color.WHITE));
-                        chatBox.clear();
-                        for(ChatMessage chatmessage: chatBoxContentTemp)
-                        {
-                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                        chatBox.row();
-                        }
-                      
-                        
-                    }
+            try {
+                BroadcastChatmessage(new Chatmessage(chatInput.getText(),self.getUsername(),Color.WHITE));
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                 
+               
 
-                    chatInput.setText("<PRESS ENTER TO TYPE>");
+                   
                     pressedEnter = false;
                 }
                 break;
@@ -776,4 +751,37 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
              p.render(batch);
          }
      }
+    
+     public void BroadcastChatmessage(Chatmessage chatmessage) throws RemoteException
+    {
+     serverComms.broadcastChatmessage(chatmessage);
+    }
+     
+     public void ReceiveNewChatmessage(Chatmessage chatmessageparamater)
+    {
+    if (chatBoxContentTemp.size() == 3) {
+                       chatBoxContentTemp.remove(0);
+                         chatBoxContentTemp.add(chatmessageparamater);
+                        chatBox.clear();
+                        for(Chatmessage chatmessage: chatBoxContentTemp)
+                        {
+                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                        chatBox.row();
+                        }
+                       
+                    } else {
+                        chatBoxContentTemp.add(chatmessageparamater);
+                        chatBox.clear();
+                        for(Chatmessage chatmessage: chatBoxContentTemp)
+                        {
+                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                        chatBox.row();
+                        }
+                        
+                      
+                        
+                    }
+     chatInput.setText("<PRESS ENTER TO TYPE>");
+    }
+     
 }

@@ -13,8 +13,8 @@ import player2.Player;
  */
 public interface IChat 
 {
-     public void ReceiveMessage(ChatMessage chatMessage);
-    public void SendMessage(ChatMessage chatMessage, Player self);
+     public void ReceiveMessage(Chatmessage chatMessage);
+    public void SendMessage(Chatmessage chatMessage, Player self);
     
     
 }
