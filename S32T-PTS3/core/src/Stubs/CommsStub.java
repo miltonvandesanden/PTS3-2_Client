@@ -5,6 +5,7 @@
  */
 package Stubs;
 
+import Chat.Chatmessage;
 import Game.ClientManager;
 import Game.IComms;
 import java.awt.Point;
@@ -45,6 +46,13 @@ public class CommsStub extends UnicastRemoteObject implements IComms
             competingPlayer.getPlayerCar().setRotation(rotation);
             clientManager.getMainMatch().addPlayer(competingPlayer);
         }
+    }
+
+    @Override
+    public void receiveNewChatmessage(Chatmessage chatmessage) throws RemoteException {
+   
+        clientManager.ReceiveNewChatmessage(chatmessage);
+    
     }
 }
 
