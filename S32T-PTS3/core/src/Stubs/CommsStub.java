@@ -7,12 +7,15 @@ package Stubs;
 
 import Game.ClientManager;
 import Game.IComms;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.awt.Point;
 import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 import player2.Player;
 import utils2.Color;
+import utils2.Projectile;
 
 /**
  *
@@ -46,7 +49,11 @@ public class CommsStub extends UnicastRemoteObject implements IComms
             clientManager.getMainMatch().addPlayer(competingPlayer);
         }
     }
+
+
+public void pushBullet(Projectile projectile)
+    {
+        //Map<Projectile,Sprite> projectilesmap = (HashMap<Projectile,Sprite>)clientManager.getProjectiles();
+        ((HashMap<Projectile,Sprite>)clientManager.getProjectiles()).put(projectile, null);
+    }
 }
-
-
- 

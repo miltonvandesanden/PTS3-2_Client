@@ -38,6 +38,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import player2.SpectatingPlayer;
@@ -45,8 +47,8 @@ import utils2.PlayerState;
 
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
 
-    private List<Projectile> projectiles = new ArrayList<>();
-    
+    //private List<Projectile> projectiles = new ArrayList<>();
+    private HashMap<Projectile,Sprite> projectiles = new HashMap<>();
     //Map variables
     private MapManager mapManager;
     private Match mainMatch;
@@ -86,7 +88,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "145.93.33.181";
+    private final String SERVERIP = "145.93.77.161";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -95,6 +97,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
+    Texture textureprojectile; 
     private Sprite sprite1;
     private Sprite sprite2;
     private Sprite sprite3;
@@ -157,11 +160,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
        }
     }
 
-    public List<Projectile> getProjectiles() {
+    public HashMap<Projectile,Sprite> getProjectiles() {
         return projectiles;
     }
 
-    public void setProjectiles(List<Projectile> projectiles) {
+    public void setProjectiles(HashMap<Projectile,Sprite> projectiles) {
         this.projectiles = projectiles;
     }
 
@@ -252,7 +255,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         //map variables
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
-       
+        textureprojectile = new Texture("images/bullet.png");
 
         
         //timelapse variables
@@ -410,7 +413,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        DisplayTimeLapsed();
         chatBox.draw(batch, totalTime);
         chatInput.draw(batch, totalTime);
-//        handleShooting();
+        try {
+            handleShooting();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
         batch.end();
     }
 
@@ -700,17 +707,20 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         return true;
     }
     
-    public void handleShooting()
+   public void handleShooting() throws RemoteException
      {
          //Shoot
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))
-         {
-             projectiles.add(new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar()));
+         { 
+            Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
+            projectiles.put(proj, new Sprite(textureprojectile));
+            serverComms.pushProjectile(proj);
+            //projectilesprite = new Sprite(textureprojectile);
          }
          
          //Update
          ArrayList<Projectile> projectilesToRemove = new ArrayList<>();
-         for(Projectile p : projectiles)
+         for(Projectile p : projectiles.keySet())
          {
              p.update(Gdx.graphics.getDeltaTime());
              if(p.isRemove())
@@ -718,11 +728,21 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                  projectilesToRemove.add(p);
              }
          }
-         projectiles.removeAll(projectilesToRemove);
-         
-         for(Projectile p : projectiles)
+         //projectiles.removeAll(projectilesToRemove);
+         for(Projectile p : projectilesToRemove)
          {
-             p.render(batch);
+            projectiles.remove(p);
          }
+//         for(Projectile p : projectiles)
+//         {
+//             p.render(batch,projectilesprite);
+//         }
+        for(Map.Entry<Projectile,Sprite> entry : projectiles.entrySet())
+        {
+            Projectile p = entry.getKey();
+            Sprite s = entry.getValue();
+            
+            p.render(batch, s);
+        }
      }    
 }

@@ -16,4 +16,5 @@ import java.rmi.RemoteException;
 public interface IComms extends Remote
 {
     public void pushPlayerPosition(String username, Point position, float rotation) throws RemoteException;
+    
 }
