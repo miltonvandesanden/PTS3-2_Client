@@ -47,8 +47,7 @@ import utils2.PlayerState;
 
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
 
-    //private List<Projectile> projectiles = new ArrayList<>();
-    private HashMap<Projectile,Sprite> projectiles = new HashMap<>();
+    private List<Projectile> projectiles = new ArrayList<>();
     //Map variables
     private MapManager mapManager;
     private Match mainMatch;
@@ -93,7 +92,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player1";
+    private String username = "player2";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
@@ -160,11 +159,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
        }
     }
 
-    public HashMap<Projectile,Sprite> getProjectiles() {
+    public List<Projectile> getProjectiles() {
         return projectiles;
     }
 
-    public void setProjectiles(HashMap<Projectile,Sprite> projectiles) {
+    public void setProjectiles(List<Projectile> projectiles) {
         this.projectiles = projectiles;
     }
 
@@ -395,6 +394,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             }
         }
         
+        for(Projectile projectile : projectiles)
+        {
+            Sprite sprite = new Sprite(textureprojectile);
+            sprite.setPosition(projectile.getX(), projectile.getY());
+            sprite.draw(batch);
+        }   
+        
 //        for(Player player : mainMatch.getPlayers()
 //        {
 //            if(player.getClass() == CompetingPlayer.class && player != self)
@@ -413,11 +419,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        DisplayTimeLapsed();
         chatBox.draw(batch, totalTime);
         chatInput.draw(batch, totalTime);
-        try {
-            handleShooting();
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        handleShooting();
         batch.end();
     }
 
@@ -707,20 +709,24 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         return true;
     }
     
-   public void handleShooting() throws RemoteException
+   public void handleShooting() 
      {
          //Shoot
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))
          { 
             Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
-            projectiles.put(proj, new Sprite(textureprojectile));
-            serverComms.pushProjectile(proj);
-            //projectilesprite = new Sprite(textureprojectile);
+            projectiles.add(proj);
+             try {
+                 serverComms.pushProjectile(proj);
+                 //projectilesprite = new Sprite(textureprojectile);
+             } catch (RemoteException ex) {
+                 Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+             }
          }
          
          //Update
          ArrayList<Projectile> projectilesToRemove = new ArrayList<>();
-         for(Projectile p : projectiles.keySet())
+         for(Projectile p : projectiles)
          {
              p.update(Gdx.graphics.getDeltaTime());
              if(p.isRemove())
@@ -737,12 +743,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //         {
 //             p.render(batch,projectilesprite);
 //         }
-        for(Map.Entry<Projectile,Sprite> entry : projectiles.entrySet())
-        {
-            Projectile p = entry.getKey();
-            Sprite s = entry.getValue();
-            
-            p.render(batch, s);
-        }
+//        for(Map.Entry<Projectile,Sprite> entry : projectiles)
+//        {
+//            Projectile p = entry.getKey();
+//            Sprite s = entry.getValue();
+//            
+//            s.draw(batch);
+//            //batch.draw(s,p.getX(),p.getY());
+//        }
      }    
 }
