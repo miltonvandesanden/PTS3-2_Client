@@ -45,3 +45,8 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.bin
+S32T-PTS3/.gradle/2.10/taskArtifacts/fileHashes.bin
+*.class
+S32T-PTS3/core/build/classes/main/Stubs/CommsStub.class
+S32T-PTS3/core/build/libs/core-1.0.jar

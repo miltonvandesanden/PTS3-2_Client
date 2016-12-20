@@ -12,6 +12,7 @@ import java.awt.Point;
 import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import match2.Match;
 import player2.Player;
 import utils2.Color;
 
@@ -32,8 +33,10 @@ public class CommsStub extends UnicastRemoteObject implements IComms
 
     @Override
     public void pushPlayerPosition(String username, Point position, float rotation) throws RemoteException
-    {     
-        CompetingPlayer competingPlayer = (CompetingPlayer) clientManager.getMainMatch().getPlayer(username);
+    {
+        Match match = clientManager.getMainMatch();
+        Player player = match.getPlayer(username);
+        CompetingPlayer competingPlayer = (CompetingPlayer) player;
 
         if(competingPlayer != null)
         {
