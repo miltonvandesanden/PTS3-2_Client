@@ -51,9 +51,11 @@ public class CommsStub extends UnicastRemoteObject implements IComms
     }
 
 
-public void pushBullet(Projectile projectile)
+public void pushProjectile(Projectile projectile)
     {
         //Map<Projectile,Sprite> projectilesmap = (HashMap<Projectile,Sprite>)clientManager.getProjectiles();
         ((HashMap<Projectile,Sprite>)clientManager.getProjectiles()).put(projectile, null);
     }
+
+  
 }
