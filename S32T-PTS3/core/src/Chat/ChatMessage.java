@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Marouan Bakour
  * @author Milton van de Sanden
  */
-public class ChatMessage
+public class Chatmessage
 {
     private String playername;
     private String Message;
@@ -56,7 +56,7 @@ public class ChatMessage
 
     
     
-    public ChatMessage(String message, String playername, Color color)
+    public Chatmessage(String message, String playername, Color color)
     {
         this.Message = message;
         this.playername = playername;
