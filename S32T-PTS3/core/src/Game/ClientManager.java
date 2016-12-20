@@ -5,6 +5,7 @@
  */
 package Game;
 
+import Chat.Chatmessage;
 import match2.MapManager;
 import match2.Match;
 import match2.Obstacle;
@@ -77,7 +78,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private TextField chatInput;
     private boolean pressedEnter = false;
     private Table chatBox;
-
+private List<Chatmessage> chatBoxContentTemp;
     boolean temp = false;
     
     private Registry clientRegistry;
@@ -86,7 +87,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "145.93.33.181";
+    private final String SERVERIP = "192.168.190.1";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -292,6 +293,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
 
         chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
+          chatBoxContentTemp = new ArrayList<Chatmessage>();
         if(self != null)
         {
             setPosition(self, selfSprite);
@@ -550,7 +552,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        players.remove(player);
 //    }
 
-    @Override
+       @Override
     public boolean keyDown(int i) {
         switch (i) {
             case Input.Keys.W:
@@ -574,6 +576,27 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                     chatInput.appendText("a");
                 }
                 break;
+
+            case Input.Keys.ENTER:
+
+                if (pressedEnter == false) {
+                    pressedEnter = true;
+
+                    chatInput.setText("");
+                } else {
+            try {
+                BroadcastChatmessage(new Chatmessage(chatInput.getText(),self.getUsername(),Color.WHITE));
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                 
+               
+
+                   
+                    pressedEnter = false;
+                }
+                break;
+
         }
         if (pressedEnter == true) {
             switch (i) {
@@ -698,6 +721,37 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     @Override
     public boolean scrolled(int i) {
         return true;
+    }
+    
+    public void BroadcastChatmessage(Chatmessage chatmessage) throws RemoteException
+    {
+     serverComms.broadcastChatmessage(chatmessage);
+    }
+    public void ReceiveNewChatmessage(Chatmessage chatmessageparamater)
+    {
+    if (chatBoxContentTemp.size() == 3) {
+                       chatBoxContentTemp.remove(0);
+                         chatBoxContentTemp.add(chatmessageparamater);
+                        chatBox.clear();
+                        for(Chatmessage chatmessage: chatBoxContentTemp)
+                        {
+                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                        chatBox.row();
+                        }
+                       
+                    } else {
+                        chatBoxContentTemp.add(chatmessageparamater);
+                        chatBox.clear();
+                        for(Chatmessage chatmessage: chatBoxContentTemp)
+                        {
+                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                        chatBox.row();
+                        }
+                        
+                      
+                        
+                    }
+     chatInput.setText("<PRESS ENTER TO TYPE>");
     }
     
     public void handleShooting()
