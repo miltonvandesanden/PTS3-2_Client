@@ -8,13 +8,19 @@ package Stubs;
 import Chat.Chatmessage;
 import Game.ClientManager;
 import Game.IComms;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.awt.Point;
 import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+<<<<<<< HEAD
 import match2.Match;
+=======
+import java.util.HashMap;
+>>>>>>> shootingbranch
 import player2.Player;
 import utils2.Color;
+import utils2.Projectile;
 
 /**
  *
@@ -50,6 +56,7 @@ public class CommsStub extends UnicastRemoteObject implements IComms
             clientManager.getMainMatch().addPlayer(competingPlayer);
         }
     }
+<<<<<<< HEAD
 
     @Override
     public void receiveNewChatmessage(Chatmessage chatmessage) throws RemoteException {
@@ -58,6 +65,15 @@ public class CommsStub extends UnicastRemoteObject implements IComms
     
     }
 }
+=======
+>>>>>>> shootingbranch
 
 
- 
+public void pushProjectile(Projectile projectile)
+    {
+        //Map<Projectile,Sprite> projectilesmap = (HashMap<Projectile,Sprite>)clientManager.getProjectiles();
+        clientManager.getProjectiles().add(projectile);
+    }
+
+  
+}

@@ -39,6 +39,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import player2.PlayerCar;
@@ -48,7 +50,6 @@ import utils2.PlayerState;
 public class ClientManager extends ApplicationAdapter implements InputProcessor {
 
     private List<Projectile> projectiles = new ArrayList<>();
-    
     //Map variables
     private MapManager mapManager;
     private Match mainMatch;
@@ -88,15 +89,20 @@ private List<Chatmessage> chatBoxContentTemp;
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
+<<<<<<< HEAD
     private final String SERVERIP = "169.254.254.48";
+=======
+    private final String SERVERIP = "145.93.75.244";
+>>>>>>> shootingbranch
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player1";
+    private String username = "player2";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
+    Texture textureprojectile; 
     private Sprite sprite1;
     private Sprite sprite2;
     private Sprite sprite3;
@@ -254,7 +260,7 @@ private List<Chatmessage> chatBoxContentTemp;
         //map variables
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
-       
+        textureprojectile = new Texture("images/bullet.png");
 
         
         //timelapse variables
@@ -393,6 +399,13 @@ private List<Chatmessage> chatBoxContentTemp;
             }
         }
         
+        for(Projectile projectile : projectiles)
+        {
+            Sprite sprite = new Sprite(textureprojectile);
+            sprite.setPosition(projectile.getX(), projectile.getY());
+            sprite.draw(batch);
+        }   
+        
 //        for(Player player : mainMatch.getPlayers()
 //        {
 //            if(player.getClass() == CompetingPlayer.class && player != self)
@@ -411,7 +424,7 @@ private List<Chatmessage> chatBoxContentTemp;
 //        DisplayTimeLapsed();
         chatBox.draw(batch, totalTime);
         chatInput.draw(batch, totalTime);
-//        handleShooting();
+        handleShooting();
         batch.end();
     }
 
@@ -489,7 +502,39 @@ private List<Chatmessage> chatBoxContentTemp;
             }
         }
     }
+            
+    public void bulletCollision() {
+        for (Projectile p : projectiles) {
+            for (Player player : mainMatch.getPlayers()) {
+                if(player.getClass() == CompetingPlayer.class)
+                {
+                    CompetingPlayer cp = (CompetingPlayer)player;
+                   if (p.getRectangle().overlaps(cp.getPlayerCar().getRectangle())) 
+                   {
+                        cp.getPlayerCar().decreaseSpeed();
+                    } 
+                }
+//                if (cp == self) {
+//                    if (p.getRectangle().overlaps(cp.getCharacter.getRectangle())) {
+//                        cp.getCharacter().stopCar();
+//                    }
+                }
+            }
+//            if(p.getRectangle().overlaps(self.getCharacter().getRectangle()))
+//            {
+//                System.out.println("Before stop: "+self.getCharacter().getSpeed());
+//                self.getCharacter().stopCar();
+//                /*self.getCharacter().getSprite().rotate(180);
+//                self.getCharacter().moveForward();
+//                self.getCharacter().getSprite().rotate(180);*/
+//                System.out.print(" After stop: "+self.getCharacter().getSpeed());
+//            }
+        }
+    
 
+    
+    
+    
     public void renderMap() {
         batch.draw(mapTexture1, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(mapTexture2, mainMatch.getMap().getFinish().getBox().x, mainMatch.getMap().getFinish().getBox().y, mainMatch.getMap().getFinish().getBox().width, mainMatch.getMap().getFinish().getBox().height);
@@ -730,6 +775,7 @@ private List<Chatmessage> chatBoxContentTemp;
         return true;
     }
     
+<<<<<<< HEAD
     public void BroadcastChatmessage(Chatmessage chatmessage) throws RemoteException
     {
      serverComms.broadcastChatmessage(chatmessage);
@@ -762,11 +808,21 @@ private List<Chatmessage> chatBoxContentTemp;
     }
     
     public void handleShooting()
+=======
+   public void handleShooting() 
+>>>>>>> shootingbranch
      {
          //Shoot
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))
-         {
-             projectiles.add(new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar()));
+         { 
+            Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
+            projectiles.add(proj);
+             try {
+                 serverComms.pushProjectile(proj);
+                 //projectilesprite = new Sprite(textureprojectile);
+             } catch (RemoteException ex) {
+                 Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+             }
          }
          
          //Update
@@ -779,11 +835,22 @@ private List<Chatmessage> chatBoxContentTemp;
                  projectilesToRemove.add(p);
              }
          }
-         projectiles.removeAll(projectilesToRemove);
-         
-         for(Projectile p : projectiles)
+         //projectiles.removeAll(projectilesToRemove);
+         for(Projectile p : projectilesToRemove)
          {
-             p.render(batch);
+            projectiles.remove(p);
          }
+//         for(Projectile p : projectiles)
+//         {
+//             p.render(batch,projectilesprite);
+//         }
+//        for(Map.Entry<Projectile,Sprite> entry : projectiles)
+//        {
+//            Projectile p = entry.getKey();
+//            Sprite s = entry.getValue();
+//            
+//            s.draw(batch);
+//            //batch.draw(s,p.getX(),p.getY());
+//        }
      }    
 }

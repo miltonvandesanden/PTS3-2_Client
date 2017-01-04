@@ -10,18 +10,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import java.io.Serializable;
 
 /**
  *
- * @author Danny
+ * @author Danny en souffy
  */
 public class Projectile implements Serializable{
     
         private float x, y, speed;
 	private boolean remove;
-        private Texture texture;
-        private Sprite sprite;
+       // private Texture texture;
+        //private Sprite sprite;
+         private Rectangle rectangle;
 	private PlayerCar car;
         private boolean firstLocation = true;
         float dirX;
@@ -33,19 +35,21 @@ public class Projectile implements Serializable{
                 car = c;
 		speed = 700;
 		remove = false;
-                if(texture == null)
-                {
-                    texture = new Texture("images/bullet.png");
-                    sprite = new Sprite(texture);
-                    sprite.setOrigin(x, y);
-                }
+                rectangle = new Rectangle(startX,startY,10f,10f);
+                
+//                if(texture == null)
+//                {
+//                    texture = new Texture("images/bullet.png");
+//                    sprite = new Sprite(texture);
+//                    sprite.setOrigin(x, y);
+//                }
 	}
 	
 	public void update(float deltaTime) {
             if(firstLocation)
             {
-//                dirX = (float)Math.cos(Math.toRadians(car.getSprite().getRotation()+90));
-//                dirY = (float)Math.sin(Math.toRadians(car.getSprite().getRotation()+90));
+                dirX = (float)Math.cos(Math.toRadians(car.getRotation()+90));
+                dirY = (float)Math.sin(Math.toRadians(car.getRotation()+90));
                 firstLocation = false;
             }
             x +=  dirX * speed * deltaTime;
@@ -55,7 +59,7 @@ public class Projectile implements Serializable{
         }
     }
         
-        public void render(SpriteBatch batch)
+        public void render(SpriteBatch batch, Sprite sprite)
         {
             batch.draw(sprite, x, y);
             //sprite.draw(batch);
@@ -68,7 +72,13 @@ public class Projectile implements Serializable{
 	public float getY() {
 		return y;
 	}
-
+        
+        public Rectangle getRectangle()
+        {
+        return rectangle;
+        }
+        
+        
 	public float getSpeed() {
 		return speed;
 	}
@@ -94,3 +104,4 @@ public class Projectile implements Serializable{
 		this.remove = remove;
 	}
 }
+    
