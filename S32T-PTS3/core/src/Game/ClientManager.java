@@ -90,13 +90,13 @@ private List<Chatmessage> chatBoxContentTemp;
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
 
-    private final String SERVERIP = "169.254.111.131";
+    private final String SERVERIP = "169.254.254.48";
 
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player2";
+    private String username = "player4";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
@@ -422,6 +422,7 @@ private List<Chatmessage> chatBoxContentTemp;
 //        DisplayTimeLapsed();
         chatBox.draw(batch, totalTime);
         chatInput.draw(batch, totalTime);
+        handleShooting();
         handleShooting();
         batch.end();
     }
