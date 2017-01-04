@@ -423,7 +423,8 @@ private List<Chatmessage> chatBoxContentTemp;
         chatBox.draw(batch, totalTime);
         chatInput.draw(batch, totalTime);
         handleShooting();
-        handleShooting();
+        bulletCollision();
+        
         batch.end();
     }
 
@@ -850,4 +851,9 @@ private List<Chatmessage> chatBoxContentTemp;
 //            //batch.draw(s,p.getX(),p.getY());
 //        }
      }    
+    
+     
+    
+
+    
 }
