@@ -87,7 +87,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-    private final String SERVERIP = "169.254.158.178";
+    private final String SERVERIP = "145.93.75.244";
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -494,7 +494,39 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             }
         }
     }
+            
+    public void bulletCollision() {
+        for (Projectile p : projectiles) {
+            for (Player player : mainMatch.getPlayers()) {
+                if(player.getClass() == CompetingPlayer.class)
+                {
+                    CompetingPlayer cp = (CompetingPlayer)player;
+                   if (p.getRectangle().overlaps(cp.getPlayerCar().getRectangle())) 
+                   {
+                        cp.getPlayerCar().decreaseSpeed();
+                    } 
+                }
+//                if (cp == self) {
+//                    if (p.getRectangle().overlaps(cp.getCharacter.getRectangle())) {
+//                        cp.getCharacter().stopCar();
+//                    }
+                }
+            }
+//            if(p.getRectangle().overlaps(self.getCharacter().getRectangle()))
+//            {
+//                System.out.println("Before stop: "+self.getCharacter().getSpeed());
+//                self.getCharacter().stopCar();
+//                /*self.getCharacter().getSprite().rotate(180);
+//                self.getCharacter().moveForward();
+//                self.getCharacter().getSprite().rotate(180);*/
+//                System.out.print(" After stop: "+self.getCharacter().getSpeed());
+//            }
+        }
+    
 
+    
+    
+    
     public void renderMap() {
         batch.draw(mapTexture1, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(mapTexture2, mainMatch.getMap().getFinish().getBox().x, mainMatch.getMap().getFinish().getBox().y, mainMatch.getMap().getFinish().getBox().width, mainMatch.getMap().getFinish().getBox().height);

@@ -72,7 +72,13 @@ public class Projectile implements Serializable{
 	public float getY() {
 		return y;
 	}
-
+        
+        public Rectangle getRectangle()
+        {
+        return rectangle;
+        }
+        
+        
 	public float getSpeed() {
 		return speed;
 	}
