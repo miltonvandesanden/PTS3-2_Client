@@ -89,11 +89,9 @@ private List<Chatmessage> chatBoxContentTemp;
     
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
-<<<<<<< HEAD
-    private final String SERVERIP = "169.254.254.48";
-=======
-    private final String SERVERIP = "145.93.75.244";
->>>>>>> shootingbranch
+
+    private final String SERVERIP = "169.254.111.131";
+
     
     private IComms clientComms;
     private IServerComms serverComms;
@@ -775,7 +773,7 @@ private List<Chatmessage> chatBoxContentTemp;
         return true;
     }
     
-<<<<<<< HEAD
+
     public void BroadcastChatmessage(Chatmessage chatmessage) throws RemoteException
     {
      serverComms.broadcastChatmessage(chatmessage);
@@ -808,9 +806,7 @@ private List<Chatmessage> chatBoxContentTemp;
     }
     
     public void handleShooting()
-=======
-   public void handleShooting() 
->>>>>>> shootingbranch
+
      {
          //Shoot
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))

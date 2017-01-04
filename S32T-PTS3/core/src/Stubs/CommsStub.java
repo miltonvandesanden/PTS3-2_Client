@@ -13,11 +13,11 @@ import java.awt.Point;
 import player2.CompetingPlayer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-<<<<<<< HEAD
+
 import match2.Match;
-=======
+
 import java.util.HashMap;
->>>>>>> shootingbranch
+
 import player2.Player;
 import utils2.Color;
 import utils2.Projectile;
@@ -56,7 +56,7 @@ public class CommsStub extends UnicastRemoteObject implements IComms
             clientManager.getMainMatch().addPlayer(competingPlayer);
         }
     }
-<<<<<<< HEAD
+
 
     @Override
     public void receiveNewChatmessage(Chatmessage chatmessage) throws RemoteException {
@@ -64,9 +64,8 @@ public class CommsStub extends UnicastRemoteObject implements IComms
         clientManager.ReceiveNewChatmessage(chatmessage);
     
     }
-}
-=======
->>>>>>> shootingbranch
+
+
 
 
 public void pushProjectile(Projectile projectile)
