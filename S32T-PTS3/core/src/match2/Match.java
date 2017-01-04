@@ -21,6 +21,7 @@ public class Match implements Serializable
     private GameState gameState;
     private Map map;
     private List<Player> players;
+    private List<String> finishedPlayers;
     public final int MAXLAPS = 1;
     
     public static final long serialVersionUID = 1875;
@@ -101,5 +102,39 @@ public class Match implements Serializable
 
     public void setMap(Map map) {
         this.map = map;
+    }
+    
+        public void setFinishedPlayers(List<String> finishedPlayers)
+    {
+        this.finishedPlayers = finishedPlayers;
+    }
+    
+    public List<String> getFinishedPlayers()
+    {
+        return finishedPlayers;
+    }
+    
+    public boolean addFinishedPlayer(String player)
+    {
+        finishedPlayers.add(player);
+
+        int count = 0;
+
+        for(Player player2 : players)
+        {
+            count++;
+        }
+
+        if(count == finishedPlayers.size())
+        {
+            return true;
+        }        
+        
+        return false;
+    }
+    
+    public void removeFinishedPlayer(String player)
+    {
+        finishedPlayers.remove(player);
     }
 }
