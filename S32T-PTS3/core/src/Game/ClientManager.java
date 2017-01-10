@@ -35,6 +35,7 @@ import comms.IServerComms;
 import java.awt.Point;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -47,8 +48,10 @@ import player2.PlayerCar;
 import player2.SpectatingPlayer;
 import utils2.PlayerState;
 
-public class ClientManager extends ApplicationAdapter implements InputProcessor {
-
+public class ClientManager extends ApplicationAdapter implements InputProcessor
+{
+    private boolean connectionComplete = false;
+    
     private List<Projectile> projectiles = new ArrayList<>();
     //Map variables
     private MapManager mapManager;
@@ -96,7 +99,7 @@ private List<Chatmessage> chatBoxContentTemp;
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player4";
+    private String username = "player1";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
@@ -107,60 +110,65 @@ private List<Chatmessage> chatBoxContentTemp;
     
     public ClientManager()
     {
+        connectionComplete = false;
+        
         try
         {
             IP = InetAddress.getLocalHost();
             clientComms = new CommsStub(this);
             
+            
+            //HOST CLIENT
             clientRegistry = LocateRegistry.createRegistry(PORTNUMBER);
             clientRegistry.rebind("Client", clientComms);
             
             System.out.println("Client running");
             System.out.println("IP: " + IP.toString());
             System.out.println("Port: " + PORTNUMBER);
-            
-        } catch (RemoteException | UnknownHostException ex)
-        {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("CLIENT HOST CRASHED");
-        }
-        
-        try
-        {
+//            System.out.println("CLIENT HOST CRASHED");
+
+            //CONNECT TO SERVER
             serverRegistry = LocateRegistry.getRegistry(SERVERIP, SERVERPORT);
             
             System.out.println("client connected with server");
             System.out.println("IP: " + SERVERIP);
             System.out.println("PORT: " + SERVERPORT);
-        } catch (RemoteException ex)
-        {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Connection failed");
-        }
-        
-        try
-        {
+
+//            System.out.println("Connection failed");
+
             serverComms = (IServerComms) serverRegistry.lookup("Server");
             System.out.println("ServerComms received");
-        } catch (RemoteException | NotBoundException ex)
+
+            mainMatch = logIn(username, isCompeting);
+            
+            if(mainMatch.getPlayer(username).getClass() == CompetingPlayer.class)
+            {
+                self = (CompetingPlayer) mainMatch.getPlayer(username);
+                self.setPlayerState(PlayerState.RACING);
+            }
+            else
+            {
+                self2 = (SpectatingPlayer) mainMatch.getPlayer(username);
+            }
+
+            connectionComplete = true;
+        } 
+        catch (RemoteException | UnknownHostException | NotBoundException ex)
         {
-            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);            
+            connectionComplete = false;
+            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-       mainMatch = logIn(username, isCompeting);
-       
-       
-       
-       
-       
-       if(mainMatch.getPlayer(username).getClass() == CompetingPlayer.class)
-       {
-           self = (CompetingPlayer) mainMatch.getPlayer(username);
-           self.setPlayerState(PlayerState.RACING);
-       }
-       else
-       {
-           self2 = (SpectatingPlayer) mainMatch.getPlayer(username);
-       }
+        finally
+        {
+            try
+            {
+                serverComms.pushConnectionState(connectionComplete);
+            }
+            catch (RemoteException ex)
+            {
+                Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public List<Projectile> getProjectiles() {
