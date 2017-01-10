@@ -22,7 +22,7 @@ public class Match implements Serializable
     private Map map;
     private List<Player> players;
     private List<String> finishedPlayers;
-    public final int MAXLAPS = 1;
+    public final int MAXLAPS = 3;
     
     public static final long serialVersionUID = 1875;
     
