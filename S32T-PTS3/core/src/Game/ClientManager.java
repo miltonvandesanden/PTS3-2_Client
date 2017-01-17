@@ -93,13 +93,13 @@ private List<Chatmessage> chatBoxContentTemp;
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
 
-    private final String SERVERIP = "145.93.77.43";
+    private final String SERVERIP = "127.0.0.1";
 
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player2";
+    private String username = "pussy";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
@@ -831,7 +831,7 @@ private List<Chatmessage> chatBoxContentTemp;
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))
          { 
               //play sound
-        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/bullet.mp3"));
+        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/bullet2.mp3"));
         sound.play();
             Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
             projectiles.add(proj);
