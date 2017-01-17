@@ -99,7 +99,7 @@ private List<Chatmessage> chatBoxContentTemp;
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "player1";
+    private String username = "player2";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
@@ -830,8 +830,12 @@ private List<Chatmessage> chatBoxContentTemp;
          //Shoot
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))
          { 
+              //play sound
+        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/bullet.mp3"));
+        sound.play();
             Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
             projectiles.add(proj);
+            
             //self.getPlayerCar().shootingspeedincrease();
              try {
                  serverComms.pushProjectile(proj);
