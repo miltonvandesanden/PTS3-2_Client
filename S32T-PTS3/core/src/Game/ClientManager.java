@@ -26,6 +26,7 @@ import player2.Player;
 import Stubs.CommsStub;
 import utils2.Projectile;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -34,6 +35,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -69,6 +71,9 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //    private List<Player> players;
     private SpriteBatch batch;
     private BitmapFont PlayernameTag;
+    private BitmapFont playernameTag2;
+    private BitmapFont playernameTag3;
+    private BitmapFont playernameTag4;
     private boolean moveUp = false;
     private boolean moveRight = false;
     private boolean moveLeft = false;
@@ -114,13 +119,14 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private Sprite sprite3;
 
     private Button button;
+    private CheckBox checkbox;
 
     private Texture myTexture;
     private TextureRegion myTextureRegion;
     private TextureRegionDrawable myTexRegionDrawable;
 
     private Stage stage;
-    
+
     private GameState gameState = GameState.LOGIN;
 
     public ClientManager() {
@@ -261,15 +267,9 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         }
     }
 
-    public void createRacingGame()
-    {
+    public void createRacingGame() {
         gameState = GameState.RACING;
-        
-        mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
-        mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
-        textureprojectile = new Texture("images/bullet.png");
-
-            //timelapse variables
+        //timelapse variables
 //        startTimer = new Timer();
 //        int delay = 1000;
 //        int period = 1000;
@@ -289,9 +289,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //            }
 //        }, delay, period);
 //        //playervariables
-
 //        self = new CompetingPlayer("Player1", Utils.Color.BLACK, new Point(350, 665));
-
 //        self.getPlayerCar().setSprite(new Texture(carPath), new Point(335, 665));
 //        mainMatch.addCompetingPlayer(self);
         //chat variables
@@ -302,13 +300,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
         chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
         chatBoxContentTemp = new ArrayList<Chatmessage>();
-        if (self != null)
-        {
+        if (self != null) {
             setPosition(self, selfSprite);
         }
-        
-        try
-        {
+
+        try {
             IP = InetAddress.getLocalHost();
             clientComms = new CommsStub(this);
 
@@ -349,50 +345,73 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         } else {
             self2 = (SpectatingPlayer) mainMatch.getPlayer(username);
         }
+        
+                mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
+        mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
+        textureprojectile = new Texture("images/bullet.png");
+
     }
 
     @Override
-    public void create()
-    {
-            Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
-            sound.play();
-            //startbutton
-            batch = new SpriteBatch();
-            stage = new Stage();
-            Gdx.input.setInputProcessor(stage);
+    public void create() {
+        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
+        sound.play();
+        //startbutton
+        batch = new SpriteBatch();
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
 
-            myTexture = new Texture(Gdx.files.internal("startbutton.png"));
-            myTextureRegion = new TextureRegion(myTexture);
-            myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
-            button = new ImageButton(myTexRegionDrawable); //Set the button up
+        myTexture = new Texture(Gdx.files.internal("startbutton.png"));
+        myTextureRegion = new TextureRegion(myTexture);
+        myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
+        button = new ImageButton(myTexRegionDrawable); //Set the button up
 
-            button.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 50);
-            button.setSize(300, 40);
-            
-            nameInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
-            nameInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-            nameInput.setSize(300, 40);
+        button.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 - 300);
+        //button.setSize(300, 50);
+        
+        checkbox = new CheckBox("Competing", new Skin(Gdx.files.internal("uiskin.json")));
+        checkbox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 - 50);
+        //checkbox.setSize(50, 50);
 
+        nameInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
+        nameInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        nameInput.setSize(300, 40);
 
-            button.addListener
-            (
-                new ClickListener()
-                {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y)
-                    {
-                        System.out.println("clicked");
-                        createRacingGame();
-                        gameState = GameState.LOBBY;
-                        
-                    }
-                }
-            );
-            stage.addActor(button);
-            //play sound
-            //standard
-            Gdx.input.setInputProcessor(stage);
-            //map variables
+        button.addListener(
+                new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("clicked");
+                username = nameInput.getText();
+                isCompeting = checkbox.isChecked();
+                createRacingGame();
+                //gameState = GameState.LOBBY;
+
+            }
+        }
+        );
+        
+        PlayernameTag = new BitmapFont();
+        PlayernameTag.setColor(Color.WHITE);
+        playernameTag2 = new BitmapFont();
+        playernameTag2.setColor(Color.WHITE);
+         playernameTag3 = new BitmapFont();
+        playernameTag3.setColor(Color.WHITE);
+         playernameTag4 = new BitmapFont();
+        playernameTag4.setColor(Color.WHITE);
+        
+        stage.addActor(button);
+        stage.addActor(checkbox);
+
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
+        //play sound
+        //standard
+//            Gdx.input.setInputProcessor(this);
+        //map variables
     }
 
     public Sprite setPosition(CompetingPlayer competingPlayer, Sprite sprite) {
@@ -429,15 +448,15 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     }
 
     @Override
-    public void render()
-    {
+    public void render() {
         batch.begin();
-        
-        switch (gameState){
+
+        switch (gameState) {
             case LOGIN:
                 Gdx.gl.glClearColor(1, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 button.draw(batch, totalTime);
+                checkbox.draw(batch, totalTime);
                 nameInput.draw(batch, totalTime);
                 break;
             case LOBBY:
@@ -449,17 +468,17 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                 //render necessities
                 Gdx.gl.glClearColor(1, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-                batch.begin();
+               //batch.begin();
                 //render map and map elementsjbjhbhjvhg
                 renderMap();
                 //        //player input to car movement
                 if (self != null) {
                     selfSprite = setPosition((CompetingPlayer) self, selfSprite);
-                    
+
                     handleMovement();
                     handleCollision();
                     handleLap();
-                    
+
                     selfSprite.draw(batch);
                 }
 //        if (interval == 0) {
@@ -486,10 +505,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                                 sprite3.draw(batch);
                                 playerCounter = -1;
                         }
-                        
+
                         playerCounter++;
                     }
-                }   for (Projectile projectile : projectiles) {
+                }
+                for (Projectile projectile : projectiles) {
                     Sprite sprite = new Sprite(textureprojectile);
                     sprite.setPosition(projectile.getX(), projectile.getY());
                     sprite.draw(batch);
@@ -505,7 +525,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //                mainMatch.endMatch();
 //            }
 //        }
-//        DrawPlayername();
+        DrawPlayername();
 //        //Displays game timelapse 
 //        DisplayTimeLapsed();
                 chatBox.draw(batch, totalTime);
@@ -516,7 +536,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             default:
                 break;
         }
-        
+
         batch.end();
     }
 
@@ -555,10 +575,33 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         return --interval;
     }
 
-//    public void DrawPlayername() {
-//        PlayernameTag.draw(batch, self.getUsername(), self.getPlayerCar().getSprite().getX(), self.getPlayerCar().getSprite().getY() + 25);
-//
-//    }
+    public void DrawPlayername() {
+        PlayernameTag.draw(batch, self.getUsername(), /*self.getPlayerCar().getSprite().getX()*/ self.getPlayerCar().getRectangle().getX(), self.getPlayerCar().getRectangle().getY() + 25);
+        
+        int count = 0;
+        for(Player player : mainMatch.getPlayers())
+        {
+            if(player.getClass() == CompetingPlayer.class)
+            {
+                switch(count)
+                {
+                    case 0:
+                        playernameTag2.draw(batch, player.getUsername(), ((CompetingPlayer) player).getPlayerCar().getRectangle().getX(), ((CompetingPlayer) player).getPlayerCar().getRectangle().getY() + 25);                        
+                        break;
+                    case 1:
+                        playernameTag3.draw(batch, player.getUsername(), ((CompetingPlayer) player).getPlayerCar().getRectangle().getX(), ((CompetingPlayer) player).getPlayerCar().getRectangle().getY() + 25);
+                        break;
+                    case 2:
+                        playernameTag4.draw(batch, player.getUsername(), ((CompetingPlayer) player).getPlayerCar().getRectangle().getX(), ((CompetingPlayer) player).getPlayerCar().getRectangle().getY() + 25);
+                        break;
+                    default:
+                        break;
+                }
+                count++;
+            }
+        }
+
+    }
     public void Startcountdown(int time) {
         StartCountdown.draw(batch, "" + setInterval(), Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
     }
@@ -670,158 +713,146 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        players.remove(player);
 //    }
     @Override
-    public boolean keyDown(int i)
-    {
+    public boolean keyDown(int i) {
         System.out.println("TYPING");
-        if(gameState == GameState.LOGIN)
-        {
-            if(i == Input.Keys.ENTER)
-            {
-                if (!pressedEnter)
-                {
+        if (gameState == GameState.LOGIN) {
+            if (i == Input.Keys.ENTER) {
+                if (!pressedEnter) {
                     pressedEnter = true;
                     nameInput.setText("");
-                }
-                else if(pressedEnter)
-                {
+                } else if (pressedEnter) {
                     pressedEnter = false;
-                    
-                    if(!nameInput.getText().isEmpty())
-                    {
+
+                    if (!nameInput.getText().isEmpty()) {
                         username = nameInput.getText();
                     }
                 }
             }
 
-            if(pressedEnter)
-            {
-                switch(i)
-                {
-                        case Input.Keys.Q:
-                            nameInput.appendText("q");
-                            break;
-                        case Input.Keys.E:
-                            nameInput.appendText("e");
-                            break;
-                        case Input.Keys.R:
-                            nameInput.appendText("r");
-                            break;
-                        case Input.Keys.T:
-                            nameInput.appendText("t");
-                            break;
-                        case Input.Keys.Y:
-                            nameInput.appendText("y");
-                            break;
-                        case Input.Keys.U:
-                            nameInput.appendText("u");
-                            break;
-                        case Input.Keys.I:
-                            nameInput.appendText("i");
-                            break;
-                        case Input.Keys.O:
-                            nameInput.appendText("o");
-                            break;
-                        case Input.Keys.P:
-                            nameInput.appendText("p");
-                            break;
-                        case Input.Keys.S:
-                            nameInput.appendText("s");
-                            break;
-                        case Input.Keys.F:
-                            nameInput.appendText("f");
-                            break;
-                        case Input.Keys.G:
-                            nameInput.appendText("g");
-                        case Input.Keys.H:
-                            nameInput.appendText("h");
-                            break;
-                        case Input.Keys.J:
-                            nameInput.appendText("j");
-                            break;
-                        case Input.Keys.K:
-                            nameInput.appendText("k");
-                            break;
-                        case Input.Keys.L:
-                            nameInput.appendText("l");
-                            break;
-                        case Input.Keys.Z:
-                            nameInput.appendText("z");
-                            break;
-                        case Input.Keys.X:
-                            nameInput.appendText("x");
-                            break;
-                        case Input.Keys.C:
-                            nameInput.appendText("c");
-                            break;
-                        case Input.Keys.V:
-                            nameInput.appendText("v");
-                            break;
-                        case Input.Keys.B:
-                            nameInput.appendText("b");
-                            break;
-                        case Input.Keys.N:
-                            nameInput.appendText("n");
-                            break;
-                        case Input.Keys.M:
-                            nameInput.appendText("m");
-                            break;
-                        case Input.Keys.A:
-                            nameInput.appendText("a");
-                            break;
-                        case Input.Keys.W:
-                            nameInput.appendText("w");
-                            break;
-                        case Input.Keys.D:
-                            nameInput.appendText("d");
-                            break;
-                        case Input.Keys.SPACE:
-                            nameInput.appendText(" ");
-                            break;
-                        case Input.Keys.NUM_0:
-                            nameInput.appendText("0");
-                            break;
-                        case Input.Keys.NUM_1:
-                            nameInput.appendText("1");
-                            break;
-                        case Input.Keys.NUM_2:
-                            nameInput.appendText("2");
-                            break;
-                        case Input.Keys.NUM_3:
-                            nameInput.appendText("3");
-                            break;
-                        case Input.Keys.NUM_4:
-                            nameInput.appendText("4");
-                            break;
-                        case Input.Keys.NUM_5:
-                            nameInput.appendText("5");
-                            break;
-                        case Input.Keys.NUM_6:
-                            nameInput.appendText("6");
-                            break;
-                        case Input.Keys.NUM_7:
-                            nameInput.appendText("7");
-                            break;
-                        case Input.Keys.NUM_8:
-                            nameInput.appendText("8");
-                            break;
-                        case Input.Keys.NUM_9:
-                            nameInput.appendText("9");
-                            break;
-                        case Input.Keys.BACKSPACE:
-                            if(!nameInput.getText().isEmpty())
-                            {
-                                String input = nameInput.getText();
-                                input = input.substring(0, input.length() - 1);
-                                nameInput.setText(input);
-                            }
-                            break;
-                        default:
-                            break;
+            if (pressedEnter) {
+                switch (i) {
+                    case Input.Keys.Q:
+                        nameInput.appendText("q");
+                        break;
+                    case Input.Keys.E:
+                        nameInput.appendText("e");
+                        break;
+                    case Input.Keys.R:
+                        nameInput.appendText("r");
+                        break;
+                    case Input.Keys.T:
+                        nameInput.appendText("t");
+                        break;
+                    case Input.Keys.Y:
+                        nameInput.appendText("y");
+                        break;
+                    case Input.Keys.U:
+                        nameInput.appendText("u");
+                        break;
+                    case Input.Keys.I:
+                        nameInput.appendText("i");
+                        break;
+                    case Input.Keys.O:
+                        nameInput.appendText("o");
+                        break;
+                    case Input.Keys.P:
+                        nameInput.appendText("p");
+                        break;
+                    case Input.Keys.S:
+                        nameInput.appendText("s");
+                        break;
+                    case Input.Keys.F:
+                        nameInput.appendText("f");
+                        break;
+                    case Input.Keys.G:
+                        nameInput.appendText("g");
+                    case Input.Keys.H:
+                        nameInput.appendText("h");
+                        break;
+                    case Input.Keys.J:
+                        nameInput.appendText("j");
+                        break;
+                    case Input.Keys.K:
+                        nameInput.appendText("k");
+                        break;
+                    case Input.Keys.L:
+                        nameInput.appendText("l");
+                        break;
+                    case Input.Keys.Z:
+                        nameInput.appendText("z");
+                        break;
+                    case Input.Keys.X:
+                        nameInput.appendText("x");
+                        break;
+                    case Input.Keys.C:
+                        nameInput.appendText("c");
+                        break;
+                    case Input.Keys.V:
+                        nameInput.appendText("v");
+                        break;
+                    case Input.Keys.B:
+                        nameInput.appendText("b");
+                        break;
+                    case Input.Keys.N:
+                        nameInput.appendText("n");
+                        break;
+                    case Input.Keys.M:
+                        nameInput.appendText("m");
+                        break;
+                    case Input.Keys.A:
+                        nameInput.appendText("a");
+                        break;
+                    case Input.Keys.W:
+                        nameInput.appendText("w");
+                        break;
+                    case Input.Keys.D:
+                        nameInput.appendText("d");
+                        break;
+                    case Input.Keys.SPACE:
+                        nameInput.appendText(" ");
+                        break;
+                    case Input.Keys.NUM_0:
+                        nameInput.appendText("0");
+                        break;
+                    case Input.Keys.NUM_1:
+                        nameInput.appendText("1");
+                        break;
+                    case Input.Keys.NUM_2:
+                        nameInput.appendText("2");
+                        break;
+                    case Input.Keys.NUM_3:
+                        nameInput.appendText("3");
+                        break;
+                    case Input.Keys.NUM_4:
+                        nameInput.appendText("4");
+                        break;
+                    case Input.Keys.NUM_5:
+                        nameInput.appendText("5");
+                        break;
+                    case Input.Keys.NUM_6:
+                        nameInput.appendText("6");
+                        break;
+                    case Input.Keys.NUM_7:
+                        nameInput.appendText("7");
+                        break;
+                    case Input.Keys.NUM_8:
+                        nameInput.appendText("8");
+                        break;
+                    case Input.Keys.NUM_9:
+                        nameInput.appendText("9");
+                        break;
+                    case Input.Keys.BACKSPACE:
+                        if (!nameInput.getText().isEmpty()) {
+                            String input = nameInput.getText();
+                            input = input.substring(0, input.length() - 1);
+                            nameInput.setText(input);
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
-        }
-        else if(gameState == GameState.RACING)
-        {
+        } else if (gameState == GameState.RACING) {
             switch (i) {
                 case Input.Keys.W:
                     if (pressedEnter == false) {
@@ -966,11 +997,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                         break;
                     case Input.Keys.NUM_9:
                         chatInput.appendText("9");
-                        break;                     
+                        break;
                 }
             }
         }
-        
+
         return true;
     }
 
