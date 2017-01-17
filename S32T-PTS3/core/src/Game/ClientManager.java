@@ -93,13 +93,13 @@ private List<Chatmessage> chatBoxContentTemp;
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
 
-    private final String SERVERIP = "127.0.0.1";
+    private final String SERVERIP = "169.254.254.48";
 
     
     private IComms clientComms;
     private IServerComms serverComms;
     
-    private String username = "pussy";
+    private String username = "pussydestroyer";
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
