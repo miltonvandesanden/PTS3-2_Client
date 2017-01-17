@@ -128,6 +128,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
     private Stage stage;
 
     private GameState gameState = GameState.LOGIN;
+    
+    private BitmapFont GUIText;
+    
+    private ImageButton loginMenuTitle;
 
     public ClientManager() {
 //        try
@@ -366,15 +370,22 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
         button = new ImageButton(myTexRegionDrawable); //Set the button up
 
-        button.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 - 300);
+        button.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2 - 300);
+        
+        myTexture = new Texture(Gdx.files.internal("DeathRaceLogo.png"));
+           myTextureRegion = new TextureRegion(myTexture);
+        myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
+        loginMenuTitle = new ImageButton(myTexRegionDrawable);
+        
+        loginMenuTitle.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2 +250);
         //button.setSize(300, 50);
         
         checkbox = new CheckBox("Competing", new Skin(Gdx.files.internal("uiskin.json")));
-        checkbox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 - 50);
+        checkbox.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2 - 50);
         //checkbox.setSize(50, 50);
 
         nameInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
-        nameInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        nameInput.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2);
         nameInput.setSize(300, 40);
 
         button.addListener(
@@ -390,6 +401,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             }
         }
         );
+        
+        GUIText  = new BitmapFont();
+        GUIText.setColor(Color.WHITE);
+        
         
         PlayernameTag = new BitmapFont();
         PlayernameTag.setColor(Color.WHITE);
@@ -453,11 +468,13 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
         switch (gameState) {
             case LOGIN:
-                Gdx.gl.glClearColor(1, 0, 0, 1);
+                Gdx.gl.glClearColor(0.1843137254901961f, 0.4350588235294117645f, 0.21176470588235293f, 1f);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 button.draw(batch, totalTime);
                 checkbox.draw(batch, totalTime);
                 nameInput.draw(batch, totalTime);
+                loginMenuTitle.draw(batch, totalTime);
+                GUIText.draw(batch, "Choose username and gamemode and press start!", nameInput.getWidth()+100, (Gdx.graphics.getHeight() / 2)+70);
                 break;
             case LOBBY:
                 System.out.println("In lobby");
