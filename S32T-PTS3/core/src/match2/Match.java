@@ -18,7 +18,6 @@ import utils2.GameState;
  */
 public class Match implements Serializable
 {
-    private GameState gameState;
     private Map map;
     private List<Player> players;
     private List<String> finishedPlayers;
@@ -28,19 +27,9 @@ public class Match implements Serializable
     
     public Match()
     {
-        gameState = GameState.LOBBY;
         players = new ArrayList<>();
     }
     
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
