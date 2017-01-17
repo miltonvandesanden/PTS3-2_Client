@@ -6,7 +6,7 @@
 package Game;
 
 import Chat.Chatmessage;
-import match2.MapManager;
+import Map.MapManager;
 import match2.Match;
 import match2.Obstacle;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -35,13 +35,10 @@ import comms.IServerComms;
 import java.awt.Point;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import player2.PlayerCar;
@@ -103,10 +100,12 @@ private List<Chatmessage> chatBoxContentTemp;
     private boolean isCompeting = true;
     
     private Sprite selfSprite;
-    Texture textureprojectile; 
+    private Texture textureprojectile; 
     private Sprite sprite1;
     private Sprite sprite2;
     private Sprite sprite3;
+    
+    private Texture wallTexture;
     
     public ClientManager()
     {
@@ -267,6 +266,7 @@ private List<Chatmessage> chatBoxContentTemp;
         mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
         textureprojectile = new Texture("images/bullet.png");
+        wallTexture = new Texture("C:\\Users\\Milton van de Sanden\\Documents\\GitHub\\PTS3-2_Client\\S32T-PTS3\\core\\assets\\map\\wall.jpg");
 
         
         //timelapse variables
@@ -306,7 +306,7 @@ private List<Chatmessage> chatBoxContentTemp;
         chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
 
         chatBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 20, Gdx.graphics.getHeight());
-          chatBoxContentTemp = new ArrayList<Chatmessage>();
+          chatBoxContentTemp = new ArrayList<>();
         if(self != null)
         {
             setPosition(self, selfSprite);
@@ -555,6 +555,11 @@ private List<Chatmessage> chatBoxContentTemp;
     public void renderMap() {
         batch.draw(mapTexture1, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(mapTexture2, mainMatch.getMap().getFinish().getBox().x, mainMatch.getMap().getFinish().getBox().y, mainMatch.getMap().getFinish().getBox().width, mainMatch.getMap().getFinish().getBox().height);
+        
+        for(Obstacle wall : mainMatch.getMap().getWalls())
+        {
+            batch.draw(new Texture(wall.getSpritePath()), wall.getBox().getX(), wall.getBox().getY(), wall.getBox().getWidth(), wall.getBox().getHeight());
+        }
     }
 
     public void handleMovement()
@@ -768,7 +773,8 @@ private List<Chatmessage> chatBoxContentTemp;
     }
 
     @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
+    public boolean touchDown(int i, int i1, int i2, int i3)
+    {
         return true;
     }
 
@@ -799,29 +805,30 @@ private List<Chatmessage> chatBoxContentTemp;
     }
     public void ReceiveNewChatmessage(Chatmessage chatmessageparamater)
     {
-    if (chatBoxContentTemp.size() == 3) {
-                       chatBoxContentTemp.remove(0);
-                         chatBoxContentTemp.add(chatmessageparamater);
-                        chatBox.clear();
-                        for(Chatmessage chatmessage: chatBoxContentTemp)
-                        {
-                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                        chatBox.row();
-                        }
-                       
-                    } else {
-                        chatBoxContentTemp.add(chatmessageparamater);
-                        chatBox.clear();
-                        for(Chatmessage chatmessage: chatBoxContentTemp)
-                        {
-                        chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
-                        chatBox.row();
-                        }
-                        
-                      
-                        
-                    }
-     chatInput.setText("<PRESS ENTER TO TYPE>");
+        if (chatBoxContentTemp.size() == 3)
+        {
+            chatBoxContentTemp.remove(0);
+            chatBoxContentTemp.add(chatmessageparamater);
+            chatBox.clear();
+
+            for(Chatmessage chatmessage: chatBoxContentTemp)
+            {
+                chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+                chatBox.row();
+            }
+        }
+        else
+        {
+            chatBoxContentTemp.add(chatmessageparamater);
+            chatBox.clear();
+            
+            for(Chatmessage chatmessage: chatBoxContentTemp)
+            {
+            chatBox.add(chatmessage.getPlayername()+":"+chatmessage.getMessage());
+            chatBox.row();
+            }
+        }
+        chatInput.setText("<PRESS ENTER TO TYPE>");
     }
     
     public void handleShooting()
@@ -831,25 +838,30 @@ private List<Chatmessage> chatBoxContentTemp;
          if(Gdx.input.isKeyJustPressed(Keys.SPACE))
          { 
               //play sound
-        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/bullet2.mp3"));
-        sound.play();
+            Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/bullet2.mp3"));
+            sound.play();
             Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
             projectiles.add(proj);
             
             //self.getPlayerCar().shootingspeedincrease();
-             try {
+             try
+             {
                  serverComms.pushProjectile(proj);
                  //projectilesprite = new Sprite(textureprojectile);
-             } catch (RemoteException ex) {
+             }
+             catch (RemoteException ex)
+             {
                  Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
              }
          }
          
          //Update
          ArrayList<Projectile> projectilesToRemove = new ArrayList<>();
+         
          for(Projectile p : projectiles)
          {
              p.update(Gdx.graphics.getDeltaTime());
+         
              if(p.isRemove())
              {
                  projectilesToRemove.add(p);
@@ -872,10 +884,5 @@ private List<Chatmessage> chatBoxContentTemp;
 //            s.draw(batch);
 //            //batch.draw(s,p.getX(),p.getY());
 //        }
-     }    
-    
-     
-    
-
-    
+    }    
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Map implements Serializable
 {
-        private String backgroundPath;
+    private String backgroundPath;
     private Obstacle finish;
     private Obstacle finish2;
     private List<Obstacle> walls;

@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package match2;
+package Map;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import match2.Map;
 import match2.Obstacle;
 import match2.ObstacleType;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
