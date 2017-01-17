@@ -93,7 +93,7 @@ private List<Chatmessage> chatBoxContentTemp;
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
 
-    private final String SERVERIP = "169.254.254.48";
+    private final String SERVERIP = "145.93.77.43";
 
     
     private IComms clientComms;
@@ -407,9 +407,12 @@ private List<Chatmessage> chatBoxContentTemp;
         
         for(Projectile projectile : projectiles)
         {
+          
+          
             Sprite sprite = new Sprite(textureprojectile);
             sprite.setPosition(projectile.getX(), projectile.getY());
             sprite.draw(batch);
+          
         }   
         
 //        for(Player player : mainMatch.getPlayers()
@@ -431,6 +434,9 @@ private List<Chatmessage> chatBoxContentTemp;
         chatBox.draw(batch, totalTime);
         chatInput.draw(batch, totalTime);
         handleShooting();
+        
+        
+        
         bulletCollision();
         
         batch.end();
@@ -513,15 +519,17 @@ private List<Chatmessage> chatBoxContentTemp;
             
     public void bulletCollision() {
         for (Projectile p : projectiles) {
+            if(p.getPlayerCar() != self.getPlayerCar()){
             for (Player player : mainMatch.getPlayers()) {
                 if(player.getClass() == CompetingPlayer.class)
                 {
                     CompetingPlayer cp = (CompetingPlayer)player;
                    if (p.getRectangle().overlaps(cp.getPlayerCar().getRectangle())) 
                    {
-                        cp.getPlayerCar().decreaseSpeed();
+                       cp.getPlayerCar().decreaseSpeed();
                     } 
                 }
+            }
 //                if (cp == self) {
 //                    if (p.getRectangle().overlaps(cp.getCharacter.getRectangle())) {
 //                        cp.getCharacter().stopCar();
@@ -539,7 +547,8 @@ private List<Chatmessage> chatBoxContentTemp;
 //            }
         }
     
-
+    
+   
     
     
     
@@ -823,6 +832,7 @@ private List<Chatmessage> chatBoxContentTemp;
          { 
             Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(),self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
             projectiles.add(proj);
+            //self.getPlayerCar().shootingspeedincrease();
              try {
                  serverComms.pushProjectile(proj);
                  //projectilesprite = new Sprite(textureprojectile);

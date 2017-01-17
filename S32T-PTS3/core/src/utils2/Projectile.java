@@ -37,6 +37,8 @@ public class Projectile implements Serializable{
 		remove = false;
                 rectangle = new Rectangle(startX,startY,10f,10f);
                 
+          
+                  
 //                if(texture == null)
 //                {
 //                    texture = new Texture("images/bullet.png");
@@ -103,5 +105,9 @@ public class Projectile implements Serializable{
         {
 		this.remove = remove;
 	}
+        public PlayerCar getPlayerCar()
+        {
+            return car;
+        }
 }
     
