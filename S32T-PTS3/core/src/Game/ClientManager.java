@@ -353,7 +353,11 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
         textureprojectile = new Texture("images/bullet.png");
         
-        serverComms.pushConnectionState(true);
+        try {
+            serverComms.pushConnectionState(true);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
