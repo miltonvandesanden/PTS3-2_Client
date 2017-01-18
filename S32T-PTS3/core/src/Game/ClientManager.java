@@ -352,7 +352,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
                 mapTexture1 = new Texture(mainMatch.getMap().getBackgroundPath());
         mapTexture2 = new Texture(mainMatch.getMap().getFinish().getSpritePath());
         textureprojectile = new Texture("images/bullet.png");
-
+        
+        serverComms.pushConnectionState(true);
     }
 
     @Override
@@ -736,7 +737,6 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
 //    }
     @Override
     public boolean keyDown(int i) {
-        System.out.println("TYPING");
         if (gameState == GameState.LOGIN) {
             if (i == Input.Keys.ENTER) {
                 if (!pressedEnter) {

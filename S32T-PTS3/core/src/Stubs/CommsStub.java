@@ -51,6 +51,7 @@ public class CommsStub extends UnicastRemoteObject implements IComms
         }
         else
         {
+            System.out.println("ADDING NEW PLAYER");
             competingPlayer = new CompetingPlayer(username, Color.BLUE, position);
             competingPlayer.getPlayerCar().setRotation(rotation);
             clientManager.getMainMatch().addPlayer(competingPlayer);
