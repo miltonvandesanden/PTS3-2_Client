@@ -104,7 +104,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
 
-    private final String SERVERIP = "169.254.254.49";
+    private final String SERVERIP = "145.93.32.84";
 
     private IComms clientComms;
     private IServerComms serverComms;
@@ -542,7 +542,10 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
 //                mainMatch.endMatch();
 //            }
 //        }
-        DrawPlayername();
+        if(self != null)
+        {
+            DrawPlayername();
+        }
 //        //Displays game timelapse 
 //        DisplayTimeLapsed();
                 chatBox.draw(batch, totalTime);
