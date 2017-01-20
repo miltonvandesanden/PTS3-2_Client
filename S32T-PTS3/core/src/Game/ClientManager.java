@@ -910,7 +910,14 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
                         chatInput.setText("");
                     } else {
                         try {
-                            BroadcastChatmessage(new Chatmessage(chatInput.getText(), self.getUsername(), Color.WHITE));
+                            if(self != null)
+                            {
+                                BroadcastChatmessage(new Chatmessage(chatInput.getText(), self.getUsername(), Color.WHITE));   
+                            }
+                            else
+                            {
+                                BroadcastChatmessage(new Chatmessage(chatInput.getText(), self2.getUsername(), Color.WHITE));
+                            }
                         } catch (RemoteException ex) {
                             Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
                         }
