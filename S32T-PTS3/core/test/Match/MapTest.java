@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Match;
+package match2;
 
-import match2.Obstacle;
-import match2.Map;
-import player2.Player;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -19,188 +16,150 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author marouano
+ * @author Milton van de Sanden
  */
-public class MapTest {
+public class MapTest
+{
+    Map instance;
     
-    public MapTest() {
-    }
+    public MapTest(){}
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass(){}
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass(){}
     
     @Before
-    public void setUp() {
+    public void setUp()
+    {
+        instance = new Map("testBackgroundPath", new Obstacle(1, 1, 1, 1, "testSpritePath1", ObstacleType.FINISH), new Obstacle(2, 2, 2, 2, "testSpritePath2", ObstacleType.FINISH), new ArrayList<Obstacle>(){{new Obstacle(5, 5, 5, 5, "testSpritePathWall", ObstacleType.WALL);}});
     }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown(){}
 
-   
-    
-    
     /**
      * Test of getBackgroundPath method, of class Map.
      */
     @Test
-    public void testGetBackgroundPath() {
-        System.out.println("getBackgroundpath");
-        String BackgroundPath = "map/maps/racemap3.png";
-
-        Map instance = new Map(BackgroundPath, new Obstacle(325, 410, 20, 50, "map/finish.png", ObstacleType.FINISH), new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-                new ArrayList<Obstacle>() {
-            {
-
-                add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            }
-        });
-        String expResult = BackgroundPath;
+    public void testGetBackgroundPath()
+    {
+        System.out.println("getBackgroundPath");
+                
+        String expResult = "testBackgroundPath";
         String result = instance.getBackgroundPath();
+        
         assertEquals(expResult, result);
-
     }
-    
-        /**
-     * Test of setBackgroundPath method, of class Map.
+
+    /**
+     * Test of setbackgroundPath method, of class Map.
      */
     @Test
-    public void testsetBackgroundPath() {
-        System.out.println("setBackgroundpath");
-        String BackgroundPath = "map/maps/racemap3.png";
-
-        Map instance = new Map(BackgroundPath, new Obstacle(325, 410, 20, 50, "map/finish.png", ObstacleType.FINISH), new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-                new ArrayList<Obstacle>() {
-            {
-
-                add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            }
-        });
-        instance.setbackgroundPath(BackgroundPath);
-       
-        assertEquals(BackgroundPath, instance.getBackgroundPath());
-
+    public void testSetbackgroundPath()
+    {
+        System.out.println("setbackgroundPath");
+        
+        String backgroundPath = "testBackgroundPath2";
+        instance.setbackgroundPath(backgroundPath);
+        
+        String expResult = "testBackgroundPath2";
+        String result = instance.getBackgroundPath();
+        
+        assertEquals(expResult, result);
     }
-    
-      /**
+
+    /**
      * Test of getFinish method, of class Map.
      */
     @Test
-    public void testGetFinish() {
+    public void testGetFinish()
+    {
         System.out.println("getFinish");
-        String BackgroundPath = "map/maps/racemap3.png";
-       Obstacle finish = new Obstacle(325, 410, 20, 50, "map/finish.png",ObstacleType.FINISH) ;
-        Map instance = new Map("Map1.png",  finish , new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-                new ArrayList<Obstacle>() {
-            {
-
-                add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            }
-        });
-        Obstacle expResult = finish;
+        
+        Obstacle expResult = new Obstacle(1, 1, 1, 1, "testSpritePath1", ObstacleType.FINISH);
         Obstacle result = instance.getFinish();
-        assertEquals(expResult, result);
-
+        
+        assertEquals(expResult.getSpritePath(), result.getSpritePath());
     }
-    
-         /**
+
+    /**
      * Test of setFinish method, of class Map.
      */
     @Test
-    public void testsetFinish() {
+    public void testSetFinish()
+    {
         System.out.println("setFinish");
-        String BackgroundPath = "map/maps/racemap3.png";
-       Obstacle finish = new Obstacle(325, 410, 20, 50, "map/finish.png",ObstacleType.FINISH) ;
-        Map instance = new Map(BackgroundPath, new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH)  , new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-                new ArrayList<Obstacle>() {
-            {
-
-                add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            }
-        });
-      
+        
+        Obstacle finish = new Obstacle(3, 3, 3, 3, "testSpritePath3", ObstacleType.FINISH);
         instance.setFinish(finish);
-        assertEquals(finish, instance.getFinish());
-
+        
+        Obstacle expResult = new Obstacle(3, 3, 3, 3, "testSpritePath3", ObstacleType.FINISH);
+        Obstacle result = instance.getFinish();
+        
+        assertEquals(expResult.getSpritePath(), result.getSpritePath());
     }
-        /**
+
+    /**
      * Test of getFinish2 method, of class Map.
      */
     @Test
-    public void testGetFinish2() {
+    public void testGetFinish2()
+    {
         System.out.println("getFinish2");
-       
-       Obstacle finish2 = new Obstacle(325, 410, 20, 50, "map/finish.png",ObstacleType.FINISH) ;
-        Map instance = new Map("Map1.png",  finish2 , new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-                new ArrayList<Obstacle>() {
-            {
-
-                add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            }
-        });
-        Obstacle expResult = finish2;
+        
+        Obstacle expResult = new Obstacle(2, 2, 2, 2, "testSpritePath2", ObstacleType.FINISH);
         Obstacle result = instance.getFinish2();
-        assertEquals(expResult, result);
-
+        
+        assertEquals(expResult.getSpritePath(), result.getSpritePath());
     }
-    
-         /**
-     * Test of setFinish method, of class Map.
+
+    /**
+     * Test of setFinish2 method, of class Map.
      */
     @Test
-    public void testsetFinish2() {
+    public void testSetFinish2()
+    {
         System.out.println("setFinish2");
-        String BackgroundPath = "map/maps/racemap3.png";
-       Obstacle finish2 = new Obstacle(325, 410, 20, 50, "map/finish.png",ObstacleType.FINISH) ;
-        Map instance = new Map(BackgroundPath, new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH)  , new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-                new ArrayList<Obstacle>() {
-            {
-
-                add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            }
-        });
-      
+        
+        Obstacle finish2 = new Obstacle(4, 4, 4, 4, "testSpritePath4", ObstacleType.FINISH);
         instance.setFinish2(finish2);
-        assertEquals(finish2, instance.getFinish2());
-
+        
+        Obstacle expResult = new Obstacle(4, 4, 4, 4, "testSpritePath4", ObstacleType.FINISH);
+        Obstacle result = instance.getFinish2();
+        
+        assertEquals(expResult.getSpritePath(), result.getSpritePath());
     }
-         /**
+
+    /**
      * Test of getWalls method, of class Map.
      */
     @Test
-    public void testGetWalls() {
-        System.out.println("getFinish2");
-      List<Obstacle> walls =   new ArrayList<Obstacle>();
-      walls.add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            
-       Obstacle finish2 = new Obstacle(325, 410, 20, 50, "map/finish.png",ObstacleType.FINISH) ;
-        Map instance = new Map("Map1.png",  finish2 , new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-            walls);
-        List<Obstacle> expResult = walls;
-       List<Obstacle> result = instance.getWalls();
-        assertEquals(expResult, result);
+    public void testGetWalls()
+    {
+        System.out.println("getWalls");
+        
+        List<Obstacle> expResult = new ArrayList<Obstacle>(){{new Obstacle(5, 5, 5, 5, "testSpritePathWall", ObstacleType.WALL);}};
+        List<Obstacle> result = instance.getWalls();
 
+        assertEquals(expResult, result);
     }
-    
-             /**
+
+    /**
      * Test of setWalls method, of class Map.
      */
     @Test
-    public void testsetWalls() {
-        System.out.println("getFinish2");
-      List<Obstacle> walls =   new ArrayList<Obstacle>();
-      walls.add(new Obstacle(100, 60, 25, 350, "map/wall.jpg", ObstacleType.WALL));
-            
-       Obstacle finish2 = new Obstacle(325, 410, 20, 50, "map/finish.png",ObstacleType.FINISH) ;
-        Map instance = new Map("Map1.png",  finish2 , new Obstacle(325, 10, 20, 50, "map/finish.png", ObstacleType.FINISH),
-            walls);
-       instance.setWalls(walls);
-        assertEquals(walls, instance.getWalls());
-
-    }
+    public void testSetWalls()
+    {
+        System.out.println("setWalls");
+        
+        List<Obstacle> walls = new ArrayList<Obstacle>(){{new Obstacle(6, 6, 6, 6, "testSpritePathWall", ObstacleType.WALL);}};
+        instance.setWalls(walls);
+        
+        List<Obstacle> expResult = new ArrayList<Obstacle>(){{new Obstacle(6, 6, 6, 6, "testSpritePathWall", ObstacleType.WALL);}};
+        List<Obstacle> result = instance.getWalls();
+        
+        assertEquals(expResult, result);
+    }    
 }
