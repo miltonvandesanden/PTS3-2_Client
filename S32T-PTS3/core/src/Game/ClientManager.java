@@ -298,7 +298,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 //        mainMatch.addCompetingPlayer(self);
         //chat variables
         chatInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
-        chatInput.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+ chatInput.setPosition((Gdx.graphics.getWidth() / 2)+150, Gdx.graphics.getHeight() / 2);
         chatInput.setSize(300, 40);
         chatBox = new Table(new Skin(Gdx.files.internal("uiskin.json")));
 
@@ -358,7 +358,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
 
     @Override
     public void create() {
-        Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
+         Music sound = Gdx.audio.newMusic(Gdx.files.internal("music/ftr.mp3"));
         sound.play();
         //startbutton
         batch = new SpriteBatch();
@@ -370,22 +370,23 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
         myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
         button = new ImageButton(myTexRegionDrawable); //Set the button up
 
-        button.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2 - 300);
+        button.setPosition((Gdx.graphics.getWidth() / 2)-(button.getWidth()/2), Gdx.graphics.getHeight() / 2 - 200);
         
+        button.setSize(125, 100);
         myTexture = new Texture(Gdx.files.internal("DeathRaceLogo.png"));
            myTextureRegion = new TextureRegion(myTexture);
         myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
         loginMenuTitle = new ImageButton(myTexRegionDrawable);
         
-        loginMenuTitle.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2 +250);
+        loginMenuTitle.setPosition((Gdx.graphics.getWidth() / 2)-(loginMenuTitle.getWidth()/2), Gdx.graphics.getHeight() / 2 +250);
         //button.setSize(300, 50);
         
         checkbox = new CheckBox("Competing", new Skin(Gdx.files.internal("uiskin.json")));
-        checkbox.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2 - 50);
+        checkbox.setPosition((Gdx.graphics.getWidth() / 2)-(checkbox.getWidth()*1.6f), Gdx.graphics.getHeight() / 2 - 50);
         //checkbox.setSize(50, 50);
 
         nameInput = new TextField("<PRESS ENTER TO TYPE>", new Skin(Gdx.files.internal("uiskin.json")));
-        nameInput.setPosition((Gdx.graphics.getWidth() / 2)-(button.getMinWidth()/2), Gdx.graphics.getHeight() / 2);
+        nameInput.setPosition((Gdx.graphics.getWidth() / 2)-(nameInput.getWidth()), Gdx.graphics.getHeight() / 2);
         nameInput.setSize(300, 40);
 
         button.addListener(
@@ -474,7 +475,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
                 checkbox.draw(batch, totalTime);
                 nameInput.draw(batch, totalTime);
                 loginMenuTitle.draw(batch, totalTime);
-                GUIText.draw(batch, "Choose username and gamemode and press start!", nameInput.getWidth()+100, (Gdx.graphics.getHeight() / 2)+70);
+                GUIText.draw(batch, "Choose username and gamemode and press start!", nameInput.getWidth()+50, (Gdx.graphics.getHeight() / 2)+70);
                 break;
             case LOBBY:
                 System.out.println("In lobby");
@@ -1091,7 +1092,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor 
             }
 
         }
-        chatInput.setText("<PRESS ENTER TO TYPE>");
+        chatInput.setText("<PRESS ENTER TO TYPE YOUR NAME>");
     }
 
     public void handleShooting() {
