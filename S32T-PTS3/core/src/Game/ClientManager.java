@@ -1121,6 +1121,8 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
 
     public void handleShooting() {
         //Shoot
+        if(self != null)
+        {
         if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
             Projectile proj = new Projectile(self.getPlayerCar().getRectangle().getX(), self.getPlayerCar().getRectangle().getY(), self.getPlayerCar());
             projectiles.add(proj);
@@ -1130,6 +1132,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
             } catch (RemoteException ex) {
                 Logger.getLogger(ClientManager.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }            
         }
 
         //Update
