@@ -646,7 +646,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
 
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 180);
                 float speed = self.getPlayerCar().getSpeed();
-                self.getPlayerCar().setSpeed(PlayerCar.MAXSPEED);
+                //self.getPlayerCar().setSpeed(PlayerCar.MAXSPEED);
                 self.getPlayerCar().moveForward();
                 self.getPlayerCar().setSpeed(speed);
                 self.getPlayerCar().setRotation(self.getPlayerCar().getRotation() + 220);
