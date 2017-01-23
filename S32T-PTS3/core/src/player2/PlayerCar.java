@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class PlayerCar implements Serializable
 {
     private float speed;
-    public static final float MAXSPEED = 4.5f;
+    public static final float MAXSPEED = 2.0f;
     private static final float ACCELERATION = 1.02f;
     
     private float rotation;
