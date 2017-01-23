@@ -104,7 +104,7 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
     private Registry serverRegistry;
     private final int SERVERPORT = 1099;
 
-    private final String SERVERIP = "145.93.32.84";
+    private final String SERVERIP = "169.254.189.232";
 
     private IComms clientComms;
     private IServerComms serverComms;
@@ -655,19 +655,27 @@ public class ClientManager extends ApplicationAdapter implements InputProcessor
 
     public void bulletCollision() {
         for (Projectile p : projectiles) {
-            if(p.getPlayerCar() != self.getPlayerCar()){
-            for (Player player : mainMatch.getPlayers()) {
-                if (player.getClass() == CompetingPlayer.class) {
-                    CompetingPlayer cp = (CompetingPlayer) player;
-                    if (p.getRectangle().overlaps(cp.getPlayerCar().getRectangle())) {
-                        cp.getPlayerCar().decreaseSpeed();
+            if(self != null)
+            {
+                if(p.getPlayerCar() != self.getPlayerCar())
+                {
+                    for (Player player : mainMatch.getPlayers())
+                    {
+                        if (player.getClass() == CompetingPlayer.class)
+                        {
+                            CompetingPlayer cp = (CompetingPlayer) player;
+
+                            if (p.getRectangle().overlaps(cp.getPlayerCar().getRectangle()))
+                            {
+                                cp.getPlayerCar().decreaseSpeed();
+                            }
+                        }
                     }
-                }
-            }
-//                if (cp == self) {
-//                    if (p.getRectangle().overlaps(cp.getCharacter.getRectangle())) {
-//                        cp.getCharacter().stopCar();
-//                    }
+    //                if (cp == self) {
+    //                    if (p.getRectangle().overlaps(cp.getCharacter.getRectangle())) {
+    //                        cp.getCharacter().stopCar();
+    //                    }
+                }                
             }
         }
 //            if(p.getRectangle().overlaps(self.getCharacter().getRectangle()))
